@@ -15,7 +15,7 @@ ifstream fileOpen(char* fileName)
 {
     ifstream readFile;
 
-    readFile.open("scan.txt");
+    readFile.open(fileName);
 
     if (!readFile)
     {
