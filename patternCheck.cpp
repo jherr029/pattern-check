@@ -81,19 +81,19 @@ void patternCheck::printValidity()
 {
     if (valid)
     {
-        cout << "\t\t\tTrue" << " - pattern " << pattern << endl;
+        // cout << "\t\t\tTrue" << " - pattern " << pattern << endl;
         int x = 0;
     }
     else
     {
         int y = 0;
 
-        cout << "\t\t\t\tFalse";
+        // cout << "\t\t\t\tFalse";
 
-        if (pattern.length() != 0)
-            cout << " - pattern " << pattern << " found inside []" << endl;
-        else
-            cout << " - no patterns found" << endl;
+        // if (pattern.length() != 0)
+        //     cout << " - pattern " << pattern << " found inside []" << endl;
+        // else
+        //     cout << " - no patterns found" << endl;
     }
 }
 
