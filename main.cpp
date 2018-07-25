@@ -161,6 +161,10 @@ int main(int argc, char **argv)
 
         // ownDelimiter(fileLine);
     }
+    
+    // objectVector[0]->assignVectors();
+    // objectVector[0]->checkValidty();
+    // objectVector[0]->printValidity();
 
     //objectVector[0]->checkValidty();
 

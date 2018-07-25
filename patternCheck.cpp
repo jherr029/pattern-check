@@ -80,27 +80,51 @@ void patternCheck::printString()
 void patternCheck::printValidity()
 {
     if (valid)
-        cout << "True" << endl;
+    {
+        cout << "True" << " - pattern " << pattern << endl;
+    }
     else
-        cout << "False" << endl;
+    {
+
+        cout << "False";
+
+        if (pattern.length() != 0)
+            cout << " - pattern " << pattern << " found inside []" << endl;
+        else
+            cout << " - no patterns found" << endl;
+    }
 }
 
 bool patternCheck::checkBrackets()
 {
+    bool patternFound;
+    // cout << "checkBrackets" << endl;
     // do two sets of iterators
     // one from the beginning and the other from the end
     for ( auto str : subStrBrackets )
-        if (checker(str))
+    {
+        // cout << str << endl;
+        patternFound = checker(str);
+
+        if (patternFound)
             return true;
+    }
 
     return false;
 }
 
 bool patternCheck::checkOutsideBrackets()
 {
+    bool patternFound;
+    // cout << "checkOutsideBrackets" << endl;
+
     for ( auto str : subStrNoBrackets )
-        if (checker(str))
+    {
+        patternFound = checker(str);
+
+        if (patternFound)
             return true;
+    }
 
     return false;
 }
@@ -108,12 +132,18 @@ bool patternCheck::checkOutsideBrackets()
 bool patternCheck::checker(string & tempStr)
 {
 
+    // cout << "checker --- " << tempStr << endl;
+
     bool evenLength;
+
+    if (tempStr.length() < 4)
+        return false;
 
     if ( (tempStr.length() % 2) == 0 )
         evenLength = true;
     else
         evenLength = false;
+
 
     string::iterator itr = tempStr.begin();
     string::iterator peekAheadItr = itr + 3;
@@ -121,28 +151,42 @@ bool patternCheck::checker(string & tempStr)
     string::iterator backItr = tempStr.end();
     string::iterator peekBackItr = backItr - 3;
 
-    cout << "length: " << tempStr.length() << endl;
+    // cout << "length: " << tempStr.length() << endl;
 
     int i = 0;
+    bool patternFound;
 
     if (evenLength)
     {
-        for (; itr == peekBackItr && peekAheadItr == backItr; itr++, peekAheadItr++, backItr--, peekBackItr-- )
+        // cout << "even" << endl;
+
+        for (; (itr <= peekBackItr) && (peekAheadItr <= backItr); itr++, peekAheadItr++, backItr--, peekBackItr-- )
         {
-            if(iteratorCheck(*itr, *(itr + 1), *(peekAheadItr - 1), *peekAheadItr))
+            patternFound = iteratorCheck(itr, peekAheadItr, peekBackItr, backItr);
+
+            if (patternFound)
                 return true;
+            
+            // cout << i << endl;
+            i++;
         }
 
     }
+
     else
     {
-        for (; peekAheadItr != tempStr.end(); itr++, peekAheadItr++, backItr--, peekBackItr--)
+        // cout << "odd" << endl;
+        // orignal
+        for (; (itr <= peekBackItr) && (peekAheadItr <= backItr); itr++, peekAheadItr++, backItr--, peekBackItr--)
         {
 
-            if(iteratorCheck(*itr, *(itr + 1), *(peekAheadItr - 1), *peekAheadItr))
+            patternFound = iteratorCheck(itr, peekAheadItr, peekBackItr, backItr);
+
+            if (patternFound)
                 return true;
 
-            cout << i << " ---> " << peekBackItr - peekAheadItr << endl;
+            // cout << i << " ---> " << peekBackItr - peekAheadItr << endl;
+            // cout << i << endl;
             i++;
         }
     }
@@ -151,16 +195,55 @@ bool patternCheck::checker(string & tempStr)
     return false;
 }
 
-bool patternCheck::iteratorCheck(char first, char second, char third, char fourth)
+bool patternCheck::iteratorCheck(string::iterator front, string::iterator frontPeek, string::iterator backPeek, string::iterator back)
 {
-    if (first == fourth)
-        if (second == third)
+    // cout << "1)" << *front << " 2)" << *frontPeek << " 3)" << *backPeek << " 4)" << *back << endl;
+
+    if (*front == *frontPeek)
+    {
+        // cout << "front" << endl;
+
+        if (*(front + 1 ) == *(frontPeek - 1) )
+        {
+            pattern.push_back(*front);
+            pattern.push_back(*(front + 1));
+            pattern.push_back(*(frontPeek - 1));
+            pattern.push_back(*frontPeek);
             return true;
+        }
+    }
+
+    else if (*backPeek == *back)
+    {
+        // cout << "back" << endl;
+
+        if (*(backPeek + 1) == *(back - 1))
+        {
+            pattern.push_back(*backPeek);
+            pattern.push_back(*(backPeek + 1));
+            pattern.push_back(*(back - 1));
+            pattern.push_back(*back);
+            return true;
+        }
+    }
+
+    // else if (*front == *backPeek)
+    // {
+    //     cout << "both" << endl;
+
+    //     if (*frontPeek == *back)
+    //     {
+    //         pattern.push_back(*front);
+    //         pattern.push_back(*frontPeek);
+    //         pattern.push_back(*backPeek);
+    //         pattern.push_back(*back);
+    //         // cout << pattern << endl;
+        
+    //         return true;
+    //     }
+    // }
     
+    // cout << "RETURNING FALSE" << endl;
+
     return false;
 }
-        //         pattern.push_back(*itr);
-        //         pattern.push_back(*(itr + 1));
-        //         pattern.push_back(*(peekAheadItr - 1));
-        //         pattern.push_back(*peekAheadItr);
-        //         cout << pattern << endl;

@@ -16,13 +16,13 @@ class patternCheck
         bool valid;
 
         string fileStr;
-        string pattern;
+        string pattern = "";
 
         bool checkBrackets();
         bool checkOutsideBrackets();
         bool checker(string &);
 
-        bool iteratorCheck(char, char, char, char);
+        bool iteratorCheck(string::iterator, string::iterator, string::iterator, string::iterator);
     
     public:
         patternCheck(const string &);
