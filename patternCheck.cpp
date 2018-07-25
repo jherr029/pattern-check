@@ -163,6 +163,8 @@ bool patternCheck::checker(string & tempStr)
     string::iterator backItr = tempStr.end() - 1;
     string::iterator peekBackItr = backItr - 3;
 
+    int iterateBy;
+
     string::iterator leftCenter;
     string::iterator peekLeftCenter;
 
@@ -186,6 +188,7 @@ bool patternCheck::checker(string & tempStr)
         peekLeftCenter = peekAheadItr;
         peekRightCenter = peekAheadItr;
         smallStr = true;
+        iterateBy = 0;
     }
 
     if (evenLength)
@@ -216,21 +219,21 @@ bool patternCheck::checker(string & tempStr)
         // check the middle for both odd and even
 
         // for (; (itr <= peekBackItr) && (peekAheadItr <= backItr); itr++, peekAheadItr++, backItr--, peekBackItr-- )
-        for( ; (itr <= peekLeftCenter) && (peekAheadItr <= leftCenter); 
-                itr++, peekAheadItr++, backItr--, peekBackItr--, leftCenter--,
-                    peekLeftCenter--, rightCenter++, peekRightCenter++)
+        for( ; itr <= leftCenter - 3 && itr + 3 <= leftCenter; itr++, backItr--,
+                leftCenter--, rightCenter++)
         {
 
             // cout << "inisde for loop" << endl;
-            patternFoundLeft = iteratorCheck(itr, peekAheadItr, peekLeftCenter, leftCenter);
+            if (smallStr)
+                patternFoundLeft = iteratorCheck(itr, backItr);
 
-            if (!smallStr)
-                patternFoundRight = iteratorCheck(rightCenter, peekRightCenter, peekBackItr, backItr);
+            else 
+            {
+                patternFoundLeft = iteratorCheck(itr, leftCenter);
+                patternFoundRight = iteratorCheck(rightCenter, backItr);
+            }
 
-            if (patternFoundLeft)
-                return true;
-            
-            else if (patternFoundRight)
+            if (patternFoundLeft || patternFoundRight)
                 return true;
             
             // cout << i << endl;
@@ -258,23 +261,24 @@ bool patternCheck::checker(string & tempStr)
         // cout << "odd "; 
         // cout << *rightCenter << " " << *peekRightCenter << endl; 
         // orignal
-        for( ; itr <= peekLeftCenter && peekAheadItr <= leftCenter; 
-                itr++, peekAheadItr++, backItr--, peekBackItr--, leftCenter--,
-                    peekLeftCenter--, rightCenter++, peekRightCenter++)
+        for( ; itr <= leftCenter - 3 && itr + 3 <= leftCenter; itr++, backItr--,
+                leftCenter--,  rightCenter++)
         {
             // cout << *rightCenter << *peekRightCenter << " - ";
             // cout << *peekBackItr << *backItr << endl;
 
             // patternFound = iteratorCheck(itr, peekAheadItr, peekBackItr, backItr);
-            patternFoundLeft = iteratorCheck(itr, peekAheadItr, peekLeftCenter, leftCenter);
-
-            if (!smallStr)
-                patternFoundRight = iteratorCheck(rightCenter, peekRightCenter, peekBackItr, backItr);
-
-            if (patternFoundLeft)
-                return true;
+            if (smallStr)
+                patternFoundLeft =iteratorCheck(itr, backItr);
             
-            else if (patternFoundRight)
+            else
+            {
+                patternFoundLeft = iteratorCheck(itr, leftCenter);
+                patternFoundRight = iteratorCheck(rightCenter, backItr);
+            }
+
+
+            if (patternFoundLeft || patternFoundRight)
                 return true;
 
             // cout << i << " ---> " << peekBackItr - peekAheadItr << endl;
@@ -301,7 +305,7 @@ bool patternCheck::checkCenter(string::iterator first, string::iterator fourth, 
     return false;
 }
 
-bool patternCheck::iteratorCheck(string::iterator front, string::iterator frontPeek, string::iterator backPeek, string::iterator back)
+bool patternCheck::iteratorCheck(string::iterator front, string::iterator back)
 {
     // cout << "1)" << *front << " 2)" << *frontPeek << " 3)" << *backPeek << " 4)" << *back << endl;
 
@@ -311,29 +315,29 @@ bool patternCheck::iteratorCheck(string::iterator front, string::iterator frontP
     //     return false;
     // }
 
-    if (*front == *frontPeek)
+    if (*front == *(front + 3))
     {
         // cout << "front" << endl;
 
-        if (*(front + 1 ) == *(frontPeek - 1) )
+        if (*(front + 1 ) == *(front - 1) )
         {
             pattern.push_back(*front);
             pattern.push_back(*(front + 1));
-            pattern.push_back(*(frontPeek - 1));
-            pattern.push_back(*frontPeek);
+            pattern.push_back(*(front - 1));
+            pattern.push_back(*(front + 3));
             // cout << "front is true" << endl;
             return true;
         }
     }
 
-    else if (*backPeek == *back)
+    else if (*(back - 3) == *back)
     {
         // cout << "back" << endl;
 
-        if (*(backPeek + 1) == *(back - 1))
+        if (*(back - 2) == *(back - 1))
         {
-            pattern.push_back(*backPeek);
-            pattern.push_back(*(backPeek + 1));
+            pattern.push_back(*(back - 3));
+            pattern.push_back(*(back - 2));
             pattern.push_back(*(back - 1));
             pattern.push_back(*back);
             // cout << "back is true" << endl;
