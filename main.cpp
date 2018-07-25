@@ -28,68 +28,6 @@ ifstream fileOpen(char* fileName)
     return readFile;
 }
 
-void ownDelimiter(string str)
-{
-    size_t position = 0;
-    string token;
-
-    vector<string> withoutBrackets;
-    vector<string> withBrackets;
-
-    bool bracketSwitch = false;
-    bool substrInBrackets = false;
-    string bracket = "[";
-
-    while( (position = str.find( bracket )) != string::npos ) 
-    {
-        if (!bracketSwitch)
-            bracket = "]";
-        else 
-            bracket = "[";
-        
-
-        bracketSwitch = !bracketSwitch; 
-
-        token = str.substr(0, position);
-        str.erase(0, position + 1);
-
-        if (position != 0 ) 
-        {
-
-            if (substrInBrackets)
-                withBrackets.push_back(token);
-            
-            else
-                withoutBrackets.push_back(token);
-            
-            substrInBrackets = !substrInBrackets;
-        }
-
-        else
-            substrInBrackets = true;
-
-    }
-
-    if ( str.length() > 0 )
-    {
-        // cout << " --- " <<  str << endl;
-        withoutBrackets.push_back(str);
-    }
-
-    /*
-    cout << endl;
-    cout << "With brackets " << endl;
-    for ( auto ele : withBrackets )
-        cout << ele << endl;;
-
-    cout << "\nWithout brackets" << endl;
-    for ( auto ele : withoutBrackets )
-        cout << ele << endl;
-    */
-    
-
-}
-
 void boostToken(string str)
 {
 
@@ -137,12 +75,9 @@ int main(int argc, char **argv)
 {
 
     string fileLine, fileLine2;
-    char * itr;
-    const char * charString;
 
     vector<patternCheck *> objectVector;
 
-    cout << argv[1] << endl;
     ifstream  inputFile = fileOpen(argv[1]);
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
