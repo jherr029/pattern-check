@@ -23,6 +23,7 @@ class patternCheck
         bool checker(string &);
 
         bool iteratorCheck(string::iterator, string::iterator, string::iterator, string::iterator);
+        bool checkCenter(string::iterator, string::iterator, int);
     
     public:
         patternCheck(const string &);

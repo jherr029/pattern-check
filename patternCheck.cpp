@@ -201,6 +201,9 @@ bool patternCheck::checker(string & tempStr)
             peekLeftCenter = leftCenter - 3;
             peekRightCenter = rightCenter + 3;
 
+            if (checkCenter(rightCenter - 3, rightCenter, 4))
+                return true;
+
             // cout << *rightCenter << endl;
 
             // cout << *rightCenter << *(rightCenter+1) << *(rightCenter+2) <<  *(rightCenter+3) << endl;
@@ -246,6 +249,9 @@ bool patternCheck::checker(string & tempStr)
 
             peekLeftCenter = leftCenter - 3;
             peekRightCenter = rightCenter + 3;
+
+            if (checkCenter(leftCenter - 2, leftCenter + 1, 2))
+                return true;
         }
 
         
@@ -277,6 +283,20 @@ bool patternCheck::checker(string & tempStr)
         }
     }
 
+
+    return false;
+}
+
+bool patternCheck::checkCenter(string::iterator first, string::iterator fourth, int maxItr)
+{
+    for ( int i = 0; i < maxItr; i++, first++, fourth++)
+    {
+        if ( (*first == *fourth) && (*(first + 1) == *(fourth - 1)) )
+        {
+            return true;
+        }
+
+    }
 
     return false;
 }
