@@ -291,63 +291,18 @@ bool patternCheck::checkCenter(string::iterator first, string::iterator fourth, 
 
 bool patternCheck::iteratorCheck(string::iterator front, string::iterator back)
 {
-    // cout << "1)" << *front << " 2)" << *frontPeek << " 3)" << *backPeek << " 4)" << *back << endl;
 
-    // if ((*front == '\000' && *frontPeek == '\000' ) || (*backPeek =='\000' && *back == '\000'))
-    // {
-    //     cout << "WE HAVE NULL" << endl;
-    //     return false;
-    // }
-
-    // cout << *front << *(front + 1) << *(front)
-
-    if (*front == *(front + 3))
+    if ( ( *front == *( front + 3 ) ) && ( * ( front + 1 ) == *( front + 2 ) ) ) 
     {
-        // cout << "front" << endl;
-
-        if (*(front + 1 ) == *(front + 2) )
-        {
-            pattern.push_back(*front);
-            pattern.push_back(*(front + 1));
-            pattern.push_back(*(front + 2));
-            pattern.push_back(*(front + 3));
-            // cout << "front is true" << endl;
-            return true;
-        }
+        setPattern( front, true );
+        return true;
     }
 
-    else if (*(back - 3) == *back)
+    else if ( ( *( back - 3 ) == *back ) && ( *( back - 2 ) == *( back - 1 ) ) )
     {
-        // cout << "back" << endl;
-
-        if (*(back - 2) == *(back - 1))
-        {
-            pattern.push_back(*(back - 3));
-            pattern.push_back(*(back - 2));
-            pattern.push_back(*(back - 1));
-            pattern.push_back(*back);
-            // cout << "back is true" << endl;
-            return true;
-        }
+        setPattern( back, false );
+        return true;
     }
-
-    // else if (*front == *backPeek)
-    // {
-    //     cout << "both" << endl;
-
-    //     if (*frontPeek == *back)
-    //     {
-    //         pattern.push_back(*front);
-    //         pattern.push_back(*frontPeek);
-    //         pattern.push_back(*backPeek);
-    //         pattern.push_back(*back);
-    //         // cout << pattern << endl;
-        
-    //         return true;
-    //     }
-    // }
-    
-    // cout << "RETURNING FALSE" << endl;
 
     return false;
 }
