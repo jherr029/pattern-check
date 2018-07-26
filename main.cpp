@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 
         if (tempObject->getValidty())
         {
-            tempObject->printCorrectPatterns();
+            tempObject->printCorrectPatterns(false);
             i++;
         }
 
@@ -102,6 +102,13 @@ int main(int argc, char **argv)
 
             // ownDelimiter(fileLine);
     }
+
+    // for ( auto obj : objectVector )
+    // {
+    //     //TODO: change spelling
+    //     if (!(obj->getValidty()))
+    //         obj->printIncorrectPatterns();
+    // }
 
     cout << "Number Correct: " << i << endl;
     

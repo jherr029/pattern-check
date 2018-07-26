@@ -104,11 +104,19 @@ void patternCheck::printValidity()
     }
 }
 
-void patternCheck::printCorrectPatterns()
+void patternCheck::printCorrectPatterns(bool brackets)
 {
     patternSubstring.insert(startPosition, "(");
     patternSubstring.insert(endPosition + 2, ")");
-    cout << "Pattern " << pattern << " in substring " << patternSubstring << endl;
+
+    cout << "Pattern " << pattern << " in substring ";
+    if (!brackets)
+        cout << patternSubstring << endl;
+
+    else
+    {
+        cout << "[" << patternSubstring << "]" << endl;
+    }
 
     startPosition++;
     endPosition++;
@@ -117,6 +125,18 @@ void patternCheck::printCorrectPatterns()
     // cout << patternSubstring[endPosition - 1] << patternSubstring[endPosition] << endl;
 
     cout << endl;
+
+}
+
+void patternCheck::printIncorrectPatterns()
+{
+    if (pattern == "NO PATTERN FOUND")
+        return;
+    
+    else
+        printCorrectPatterns(true);
+
+
 
 }
 
@@ -246,6 +266,9 @@ bool patternCheck::checkCenter(string::iterator first, string::iterator fourth,
 
     for ( int i = 0; i < maxItr; i++, first++, fourth++)
     {
+        if (*first == *(first + 1) || *fourth == *(fourth - 1) )
+            return false;
+
         if (  (*first == *fourth) && ( *( first + 1 ) == *( fourth - 1 ) ) )
         {
             // cout << *first << *(first + 1) << *(first + 2) << *(first + 3) << endl;
@@ -292,6 +315,8 @@ bool patternCheck::iteratorLoop(string::iterator front, string::iterator leftCen
 
 bool patternCheck::iteratorCheck(string::iterator front, string::iterator back, string & substr)
 {
+    if ( *front == *( front + 1 ) || *back == *(back - 1 ) )
+        return false;
 
     if ( ( *front == *( front + 3 ) ) && ( * ( front + 1 ) == *( front + 2 ) ) ) 
     {
