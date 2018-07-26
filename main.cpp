@@ -92,15 +92,15 @@ int main(int argc, char **argv)
         tempObject->checkValidty();
         // tempObject->printValidity();
 
-        // if (tempObject->getValidty())
-        // {
+        if (tempObject->getValidty())
+        {
             tempObject->printCorrectPatterns();
             i++;
-        // }
+        }
 
         objectVector.push_back(tempObject);
 
-        // ownDelimiter(fileLine);
+            // ownDelimiter(fileLine);
     }
 
     cout << "Number Correct: " << i << endl;

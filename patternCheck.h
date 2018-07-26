@@ -13,23 +13,19 @@ class patternCheck
         vector<string> subStrBrackets;
         vector<string> subStrNoBrackets;
 
-        string::iterator startAddress;
-        string::iterator endAddress;
-
         bool valid;
-
-        string fileStr;
-        string pattern;
-        string patternSubstring;
+        int startPosition, endPosition;
+        string fileStr, pattern, patternSubstring;
 
 
         bool checkBrackets();
         bool checkOutsideBrackets();
         bool checker(string &);
 
-        bool iteratorCheck(string::iterator, string::iterator);
-        bool checkCenter(string::iterator, string::iterator, int);
-        bool iteratorLoop(string::iterator, string::iterator, string::iterator, string::iterator, bool);
+        bool iteratorCheck(string::iterator, string::iterator, string &);
+        bool checkCenter(string::iterator, string::iterator, int, string &);
+        bool iteratorLoop(string::iterator, string::iterator, string::iterator,
+                             string::iterator, bool, string &);
         void setPattern(string::iterator, bool);
 
         void assignPatternSubstring(const string &);
