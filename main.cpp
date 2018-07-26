@@ -90,12 +90,20 @@ int main(int argc, char **argv)
 
         tempObject->assignVectors();
         tempObject->checkValidty();
-        tempObject->printValidity();
+        // tempObject->printValidity();
+
+        // if (tempObject->getValidty())
+        // {
+            tempObject->printCorrectPatterns();
+            i++;
+        // }
 
         objectVector.push_back(tempObject);
 
         // ownDelimiter(fileLine);
     }
+
+    cout << "Number Correct: " << i << endl;
     
     // objectVector[0]->assignVectors();
     // objectVector[0]->checkValidty();

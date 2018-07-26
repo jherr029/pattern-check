@@ -13,10 +13,15 @@ class patternCheck
         vector<string> subStrBrackets;
         vector<string> subStrNoBrackets;
 
+        string::iterator startAddress;
+        string::iterator endAddress;
+
         bool valid;
 
         string fileStr;
-        string pattern = "";
+        string pattern;
+        string patternSubstring;
+
 
         bool checkBrackets();
         bool checkOutsideBrackets();
@@ -24,7 +29,10 @@ class patternCheck
 
         bool iteratorCheck(string::iterator, string::iterator);
         bool checkCenter(string::iterator, string::iterator, int);
+        bool iteratorLoop(string::iterator, string::iterator, string::iterator, string::iterator, bool);
         void setPattern(string::iterator, bool);
+
+        void assignPatternSubstring(const string &);
     
     public:
         patternCheck(const string &);
@@ -53,6 +61,9 @@ class patternCheck
         string getString();
 
         void printValidity();
+        void printCorrectPatterns();
+        bool getValidty() {return valid;}
+        bool isStrEven(int);
 };
 
 #endif

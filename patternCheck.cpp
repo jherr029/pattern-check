@@ -4,6 +4,8 @@
 patternCheck::patternCheck(const string & str)
 {
     fileStr = str;
+    pattern = "NO PATTERN FOUND";
+    patternSubstring = "NO PATTERN FOUND";
 }
 
 string patternCheck::getString()
@@ -11,6 +13,12 @@ string patternCheck::getString()
     cout << "hi" << endl;
     return "hi";
 }
+
+void patternCheck::assignPatternSubstring(const string & str)
+{
+    patternSubstring = str;
+}
+
 
 void patternCheck::assignVectors()
 {
@@ -81,20 +89,21 @@ void patternCheck::printValidity()
 {
     if (valid)
     {
-        cout << "\t\t\tTrue" << " - pattern " << pattern << endl;
-        int x = 0;
+        cout << "True" << " - pattern " << pattern << " ";
     }
     else
     {
-        int y = 0;
-
-        cout << "\t\t\t\tFalse";
 
         if (pattern.length() != 0)
-            cout << " - pattern " << pattern << " found inside []" << endl;
+            cout << "    False  -- pattern " << pattern << " found inside []" << endl;
         else
-            cout << " - no patterns found" << endl;
+            cout << "  False - no patterns found" << endl;
     }
+}
+
+void patternCheck::printCorrectPatterns()
+{
+    cout << "Pattern " << pattern << " in substring " << patternSubstring << endl;
 }
 
 bool patternCheck::checkBrackets()
@@ -134,46 +143,31 @@ bool patternCheck::checkOutsideBrackets()
     return false;
 }
 
+bool patternCheck::isStrEven(int strLength){
+    return ((strLength % 2) == 0);
+}
+
 bool patternCheck::checker(string & tempStr)
 {
+    int strLength = tempStr.length();
 
+    if (strLength < 4)
+        return false;
     // cout << "checker --- " << tempStr << " - " << tempStr.length() << endl;
 
-    bool evenLength;
-    int stringMidpoint = tempStr.length() / 2;
+    int stringMidpoint = strLength / 2;
 
-    if (tempStr.length() < 4)
-        return false;
-
-    if ( (tempStr.length() % 2) == 0 )
-    {
-        evenLength = true;
-    }
-
-    else
-    {
-
-        evenLength = false;
-    }
-
+    bool evenLength = isStrEven(strLength);
 
     string::iterator itr = tempStr.begin();
     string::iterator backItr = tempStr.end() - 1;
 
-
     string::iterator leftCenter;
     string::iterator rightCenter; 
 
-    // cout << "length: " << tempStr.length() << endl;
-
-    int i = 0;
-    bool patternFoundLeft;
-    bool patternFoundRight = false;
     bool smallStr = false;
 
-    // cout << "Str: " << tempStr << " ";
-
-    if (tempStr.length() < 6)
+    if (strLength < 10)
     {
         leftCenter = backItr;
         rightCenter = backItr;
@@ -181,108 +175,84 @@ bool patternCheck::checker(string & tempStr)
         smallStr = true;
     }
 
-    if (evenLength)
+    else
     {
-        // cout << "even " << endl;
-        
-        if (tempStr.length() >= 6)
+        if(evenLength)
         {
-
             rightCenter = itr + stringMidpoint;
             leftCenter = rightCenter - 1;
 
             if (checkCenter(rightCenter - 3, rightCenter, 4))
-                return true;
-
-            // cout << *rightCenter << endl;
-
-            // cout << *rightCenter << *(rightCenter+1) << *(rightCenter+2) <<  *(rightCenter+3) << endl;
-        }
-
-        // cout << "rightCenter: " << *rightCenter << " peek:" << *peekRightCenter << endl; 
-
-        // cout << *leftCenter << endl;
-
-        // check the middle for both odd and even
-
-        // for (; (itr <= peekBackItr) && (peekAheadItr <= backItr); itr++, peekAheadItr++, backItr--, peekBackItr-- )
-        for( ; itr <= leftCenter - 3 && itr + 3 <= leftCenter; itr++, backItr--,
-                leftCenter--, rightCenter++)
-        {
-
-            // cout << "inisde for loop" << endl;
-            if (smallStr)
-                patternFoundLeft = iteratorCheck(itr, backItr);
-
-            else 
             {
-                patternFoundLeft = iteratorCheck(itr, leftCenter);
-                patternFoundRight = iteratorCheck(rightCenter, backItr);
-            }
-
-            if (patternFoundLeft || patternFoundRight)
+                assignPatternSubstring(tempStr);
                 return true;
-            
-            // cout << i << endl;
-            i++;
+            }
         }
 
-    }
-
-    else
-    {
-
-        // cout << "odd " << endl;
-        if (tempStr.length() >= 6) 
+        else
         {
             leftCenter  = itr + stringMidpoint;
             rightCenter = leftCenter;
 
             if (checkCenter(leftCenter - 2, leftCenter + 1, 2))
-                return true;
-        }
-
-        
-        // cout << *rightCenter << " " << *peekRightCenter << endl; 
-        // orignal
-        for( ; itr <= leftCenter - 3 && itr + 3 <= leftCenter; itr++, backItr--,
-                leftCenter--,  rightCenter++)
-        {
-            // cout << *rightCenter << *peekRightCenter << " - ";
-            // cout << *peekBackItr << *backItr << endl;
-
-            // patternFound = iteratorCheck(itr, peekAheadItr, peekBackItr, backItr);
-            if (smallStr)
-                patternFoundLeft =iteratorCheck(itr, backItr);
-            
-            else
             {
-                patternFoundLeft = iteratorCheck(itr, leftCenter);
-                patternFoundRight = iteratorCheck(rightCenter, backItr);
-            }
-
-
-            if (patternFoundLeft || patternFoundRight)
+                assignPatternSubstring(tempStr);
                 return true;
-
-            // cout << i << " ---> " << peekBackItr - peekAheadItr << endl;
-            // cout << i << endl;
-            i++;
+            }
         }
     }
 
+    if (iteratorLoop(itr, leftCenter, rightCenter, backItr, smallStr))
+    {
+        assignPatternSubstring(tempStr);
+        return true;
+    }
 
-    return false;
+    false;
+
 }
 
 bool patternCheck::checkCenter(string::iterator first, string::iterator fourth, int maxItr)
 {
     for ( int i = 0; i < maxItr; i++, first++, fourth++)
     {
-        if ( (*first == *fourth) && (*(first + 1) == *(fourth - 1)) )
+        if (  (*first == *fourth) && ( *( first + 1 ) == *( fourth - 1 ) ) )
         {
+            // cout << *first << *(first + 1) << *(first + 2) << *(first + 3) << endl;
+            // startAddress = first;
+            // endAddress = fourth;
+            setPattern(first, true);
             return true;
         }
+
+    }
+
+    return false;
+}
+
+bool patternCheck::iteratorLoop(string::iterator front, string::iterator leftCenter, 
+                                string::iterator rightCenter, string::iterator back, 
+                                bool smallStr)
+{
+
+    bool patternFoundLeft, patternFoundRight;
+
+    for( ; front <= leftCenter - 3 && front + 3 <= leftCenter; front++, back--,
+            leftCenter--, rightCenter++)
+    {
+
+        // cout << "inisde for loop" << endl;
+        if (smallStr)
+            patternFoundLeft = iteratorCheck(front, back);
+
+        else 
+        {
+            patternFoundLeft = iteratorCheck(front, leftCenter);
+            patternFoundRight = iteratorCheck(rightCenter, back);
+        }
+
+        if ( patternFoundLeft || patternFoundRight)
+            return true;
 
     }
 
@@ -295,12 +265,16 @@ bool patternCheck::iteratorCheck(string::iterator front, string::iterator back)
     if ( ( *front == *( front + 3 ) ) && ( * ( front + 1 ) == *( front + 2 ) ) ) 
     {
         setPattern( front, true );
+        // startAddress = front;
+        // endAddress = front + 3;
         return true;
     }
 
     else if ( ( *( back - 3 ) == *back ) && ( *( back - 2 ) == *( back - 1 ) ) )
     {
         setPattern( back, false );
+        // startAddress = back - 3;
+        // endAddress = back;
         return true;
     }
 
@@ -309,6 +283,9 @@ bool patternCheck::iteratorCheck(string::iterator front, string::iterator back)
 
 void patternCheck::setPattern(string::iterator itr, bool forward)
 {
+
+    pattern.clear();
+
     for ( int i = 0; i < 4; i++ )
     {
         if (forward)
@@ -317,3 +294,25 @@ void patternCheck::setPattern(string::iterator itr, bool forward)
             pattern.push_back(*(itr - i));
     }
 }
+
+    // for( ; itr <= leftCenter - 3 && itr + 3 <= leftCenter; itr++, backItr--,
+    //         leftCenter--, rightCenter++)
+    // {
+
+    //     // cout << "inisde for loop" << endl;
+    //     if (smallStr)
+    //         patternFoundLeft = iteratorCheck(itr, backItr);
+
+    //     else 
+    //     {
+    //         patternFoundLeft = iteratorCheck(itr, leftCenter);
+    //         patternFoundRight = iteratorCheck(rightCenter, backItr);
+    //     }
+
+    //     if (patternFoundLeft || patternFoundRight)
+    //         return true;
+        
+    //     // cout << i << endl;
+    // }
+
+    // return false;
