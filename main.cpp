@@ -34,6 +34,7 @@ void boostToken(string str)
     vector<string> without;
     vector<string> with;
 
+
     bool bracketFlag = false;
     typedef tokenizer<char_separator<char> > tokenizer;
     char_separator<char> seperator("[]");
@@ -82,7 +83,13 @@ int main(int argc, char **argv)
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
+    ofstream outputFile;
+    ofstream correctFile;
+    outputFile.open("output.txt");
+    correctFile.open("cCorrect.txt");
+
     int i = 0;
+    int line = 1;
     while( getline(inputFile, fileLine ) )
     {
 
@@ -94,14 +101,20 @@ int main(int argc, char **argv)
 
         if (tempObject->getValidty())
         {
-            tempObject->printCorrectPatterns(false);
+            outputFile << line << "\n";
+            correctFile << line << "\n";
+            outputFile << tempObject->printCorrectPatterns(false);
+            outputFile << endl;
             i++;
         }
 
         objectVector.push_back(tempObject);
+        line++;
 
             // ownDelimiter(fileLine);
     }
+    outputFile.close();
+
 
     // for ( auto obj : objectVector )
     // {

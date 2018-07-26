@@ -80,7 +80,7 @@ void patternCheck::assignVectors()
     // for ( auto ele : subStrNoBrackets )
     //     cout << ele << endl;
     
-    //cout << "test" << endl;
+    // cout << endl;
 }
 
 void patternCheck::printString()
@@ -104,27 +104,32 @@ void patternCheck::printValidity()
     }
 }
 
-void patternCheck::printCorrectPatterns(bool brackets)
+string patternCheck::printCorrectPatterns(bool brackets)
 {
+    string tempStr;
+
     patternSubstring.insert(startPosition, "(");
     patternSubstring.insert(endPosition + 2, ")");
 
-    cout << "Pattern " << pattern << " in substring ";
+    // cout << "Pattern " << pattern << " in substring ";
     if (!brackets)
-        cout << patternSubstring << endl;
+        tempStr = "Pattern " + pattern + "\n" + patternSubstring + "\n" + fileStr + "\n";
+        // cout << patternSubstring << endl;
 
     else
     {
-        cout << "[" << patternSubstring << "]" << endl;
+        tempStr = "Pattern " + pattern + "\n[" + patternSubstring + "]\n" + fileStr + "\n";
+        // cout << "[" << patternSubstring << "]" << endl;
     }
 
     startPosition++;
     endPosition++;
 
+    return tempStr;
+
     // cout << patternSubstring[startPosition] << patternSubstring[startPosition + 1];
     // cout << patternSubstring[endPosition - 1] << patternSubstring[endPosition] << endl;
 
-    cout << endl;
 
 }
 
@@ -197,9 +202,11 @@ bool patternCheck::checker(string & tempStr)
     string::iterator backItr = tempStr.end() - 1;
 
     string::iterator leftCenter;
-    string::iterator rightCenter; 
+    string::iterator rightCenter;
 
     bool smallStr = false;
+    bool patternFound;
+    
 
     if (strLength < 10)
     {
@@ -216,8 +223,11 @@ bool patternCheck::checker(string & tempStr)
             rightCenter = itr + stringMidpoint;
             leftCenter = rightCenter - 1;
 
-            if (checkCenter(rightCenter - 3, rightCenter, 4, tempStr))
+            patternFound = checkCenter(rightCenter - 3, rightCenter, 4, tempStr);
+
+            if (patternFound)
             {
+                // cout << "inside checkCenter even" << endl;
                 assignPatternSubstring(tempStr);
                 return true;
             }
@@ -228,7 +238,9 @@ bool patternCheck::checker(string & tempStr)
             leftCenter  = itr + stringMidpoint;
             rightCenter = leftCenter;
 
-            if (checkCenter(leftCenter - 2, leftCenter + 1, 2, tempStr))
+            patternFound = checkCenter(leftCenter - 2, leftCenter + 1, 2, tempStr);
+
+            if (patternFound)
             {
                 assignPatternSubstring(tempStr);
                 return true;
@@ -236,8 +248,11 @@ bool patternCheck::checker(string & tempStr)
         }
     }
 
-    if (iteratorLoop(itr, leftCenter, rightCenter, backItr, smallStr, tempStr))
+    patternFound = iteratorLoop(itr, leftCenter, rightCenter, backItr, smallStr, tempStr); 
+
+    if (patternFound)
     {
+        // cout << "inside if iteratorLoop" << endl;
         assignPatternSubstring(tempStr);
         return true;
     }
@@ -250,23 +265,13 @@ bool patternCheck::checkCenter(string::iterator first, string::iterator fourth,
                                  int maxItr, string & substr)
 {
 
-    // int startPos, endPos;
 
-    // if (maxItr == 4)
-    // {
-    //     startPos = midPoint - 3;
-    //     endPos = midPoint;
-    // }
 
-    // else if (maxItr == 2)
-    // {
-    //     startPos = midPoint - 2;
-    //     endPos = midPoint + 1;
-    // }
 
     for ( int i = 0; i < maxItr; i++, first++, fourth++)
     {
-        if (*first == *(first + 1) || *fourth == *(fourth - 1) )
+        // cout << "\t" << *first << *(first + 1) << *(fourth - 1)<< *(fourth) << endl << endl;
+        if (*first == *(first + 1) && *fourth == *(fourth - 1) )
             return false;
 
         if (  (*first == *fourth) && ( *( first + 1 ) == *( fourth - 1 ) ) )
@@ -275,6 +280,7 @@ bool patternCheck::checkCenter(string::iterator first, string::iterator fourth,
 
             startPosition = first - substr.begin();
             endPosition = startPosition + 3;
+            // cout << "center check" << endl;
             setPattern(first, true);
             return true;
         }
@@ -315,7 +321,8 @@ bool patternCheck::iteratorLoop(string::iterator front, string::iterator leftCen
 
 bool patternCheck::iteratorCheck(string::iterator front, string::iterator back, string & substr)
 {
-    if ( *front == *( front + 1 ) || *back == *(back - 1 ) )
+    if ( ( ( *front == *( front + 1 ) ) && ( *(front + 2) == *(front + 3 ) ) ) ||
+         ( ( *(back - 3) == *( back - 2 ) ) && ( *(back - 1) == *back )  )  )
         return false;
 
     if ( ( *front == *( front + 3 ) ) && ( * ( front + 1 ) == *( front + 2 ) ) ) 
@@ -325,6 +332,7 @@ bool patternCheck::iteratorCheck(string::iterator front, string::iterator back, 
         endPosition = startPosition + 3;
         // startAddress = front;
         // endAddress = front + 3;
+        // cout << "front loop" << endl;
         return true;
     }
 
@@ -333,6 +341,7 @@ bool patternCheck::iteratorCheck(string::iterator front, string::iterator back, 
         setPattern( back, false );
         startPosition = back - substr.begin() - 3;
         endPosition = startPosition + 3;
+        // cout << "back loop" << endl;
         return true;
     }
 

@@ -57,7 +57,7 @@ class patternCheck
         string getString();
 
         void printValidity();
-        void printCorrectPatterns(bool);
+        string printCorrectPatterns(bool);
         void printIncorrectPatterns();
         bool getValidty() {return valid;}
         bool isStrEven(int);
