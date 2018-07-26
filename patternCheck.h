@@ -24,6 +24,7 @@ class patternCheck
 
         bool iteratorCheck(string::iterator, string::iterator);
         bool checkCenter(string::iterator, string::iterator, int);
+        void setPattern(string::iterator, bool);
     
     public:
         patternCheck(const string &);
