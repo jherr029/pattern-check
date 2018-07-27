@@ -124,12 +124,6 @@ int main(int argc, char **argv)
     // }
 
     cout << "Number Correct: " << i << endl;
-    
-    // objectVector[0]->assignVectors();
-    // objectVector[0]->checkValidty();
-    // objectVector[0]->printValidity();
-
-    //objectVector[0]->checkValidty();
 
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
 

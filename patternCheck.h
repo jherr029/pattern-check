@@ -54,7 +54,6 @@ class patternCheck
         }
 
         void printString();
-        string getString();
 
         void printValidity();
         string printCorrectPatterns(bool);
