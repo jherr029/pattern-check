@@ -22,7 +22,6 @@ void PatternCheck::printValidity( )
 
     cout << endl;
     string tempString;
-    
 
     if ( pattern_ != "NO PATTERN FOUND" )
     {
@@ -31,10 +30,9 @@ void PatternCheck::printValidity( )
         tempString.insert( patternLastIndex_ + 2, ")" );
     }
 
-
     if ( valid_ )
     {
-        cout << "True\n" << "pattern: " << pattern_ << "\n" << patternSubstring_ << endl;
+        cout << "True\n" << "pattern: " << pattern_ << "\n" << tempString << endl;
         cout << fileLine_ << endl;
     }
 
@@ -42,7 +40,7 @@ void PatternCheck::printValidity( )
     {
         if ( pattern_ != "NO PATTERN FOUND" )
         {
-            cout << "False\npattern: " << pattern_ << " found inside [" << patternSubstring_;
+            cout << "False\npattern: " << pattern_ << " found inside [" << tempString;
             cout << "]\n" << fileLine_ << endl;
         }
 
@@ -73,7 +71,12 @@ string PatternCheck::printCorrectPatterns( bool brackets )
     string tempStr;
     string tempSubstr = patternSubstring_;
 
+    // cout << tempSubstr << endl;
+
+
+
     tempSubstr.insert( patternFirstIndex_, "(" );
+    // cout << tempSubstr << endl;
     tempSubstr.insert( patternLastIndex_ + 2, ")" );
 
     if ( !brackets )
@@ -82,19 +85,21 @@ string PatternCheck::printCorrectPatterns( bool brackets )
     else
         tempStr = "pattern " + pattern_ + "\n[" + tempSubstr + "]\n" + fileLine_ + "\n";
 
-    patternFirstIndex_++;
-    patternLastIndex_++;
+    // patternFirstIndex_++;
+    // patternLastIndex_++;
 
     return tempStr;
 }
 
 string PatternCheck::printIncorrectPatterns( )
 {
-    if ( pattern_ == "NO pattern_ FOUND" )
-        return "NULL";
+    if ( pattern_ == "NO PATTERN FOUND" )
+        return ( "No pattern found\n" + fileLine_ + "\n");
 
     else
-        printCorrectPatterns( true );
+        return printCorrectPatterns( true );
+
+    return "";
 }
 
 int PatternCheck::getCorrectAmountPatterns( )

@@ -30,6 +30,11 @@ ifstream fileOpen( char*  fileName )
     return readFile;
 }
 
+vector<PatternCheck> computePattern( )
+{
+
+}
+
 int main( int argc, char **argv )
 {
     string fileLine, fileLine2;
@@ -43,8 +48,9 @@ int main( int argc, char **argv )
 
     ofstream outputFile;
     ofstream correctFile;
+    ofstream incorrectFile;
     outputFile.open("output.txt");
-
+    incorrectFile.open("incorrect.txt");
     correctFile.open("cCorrect.txt");
 
     int line = 1;
@@ -55,7 +61,6 @@ int main( int argc, char **argv )
 
         tempObject->assignVectors();
         tempObject->computeValidity();
-        // tempObject->printValidity();
 
         if (tempObject->isValid())
         {
@@ -64,15 +69,23 @@ int main( int argc, char **argv )
             outputFile << tempObject->printCorrectPatterns(false);
             outputFile << endl;
         }
+        
+        else
+        {
+            incorrectFile << line << "\n";
+            incorrectFile << tempObject->printIncorrectPatterns();
+            incorrectFile << "\n";
+        }
 
         objectVector.push_back(tempObject);
         line++;
-
     }
 
     cout << "Number Correct: " << objectVector[1]->getCorrectAmountPatterns() << endl;
 
     outputFile.close();
+    correctFile.close();
+    incorrectFile.close();
 
     // cout << "Number Correct: " << i << endl;
 
@@ -84,7 +97,7 @@ int main( int argc, char **argv )
     int vectorSize = objectVector.size();
 
     cout << endl;
-    cout << "Enter 'quit' at any time to exit " << endl;
+    cout << "Enter '-1' at any time to exit " << endl;
     cout << "Enter line number to get specific information about that line " << endl;
     cout << "Total lines: " << vectorSize << endl;
     
@@ -121,49 +134,3 @@ int main( int argc, char **argv )
 
     return 0;
 }
-
-/*
-void boostToken(string str)
-{
-
-    vector<string> without;
-    vector<string> with;
-
-
-    bool bracketFlag = false;
-    typedef tokenizer<char_separator<char> > tokenizer;
-    char_separator<char> seperator("[]");
-
-    tokenizer tokens(str);
-
-    for (tokenizer::iterator tok_iter = tokens.begin(); tok_iter != tokens.end(); ++tok_iter)
-    {
-
-        // cout << *tok_iter << endl;
-
-        if (*tok_iter == "[" || *tok_iter == "]")
-        {
-            bracketFlag = !bracketFlag;
-            tok_iter++;
-        }
-
-        if (bracketFlag)
-            with.push_back(*tok_iter);
-        
-        else if (!bracketFlag)
-            without.push_back(*tok_iter);
-        
-    }
-
-    // cout << "With" << endl;
-    // for ( auto ele : with )
-    //     cout << ele << endl;
-
-    // cout << "\nWithout" << endl;
-    // for ( auto ele : without )
-    //     cout << ele << endl;
-    
-    // cout << endl;
-
-}
-*/
