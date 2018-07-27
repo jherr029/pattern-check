@@ -80,9 +80,6 @@ string PatternCheck::printCorrectPatterns( bool brackets )
     else
         tempStr = "pattern " + pattern_ + "\n[" + tempSubstr + "]\n" + fileLine_ + "\n";
 
-    // patternFirstIndex_++;
-    // patternLastIndex_++;
-
     return tempStr;
 }
 
