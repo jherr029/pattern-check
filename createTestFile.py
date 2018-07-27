@@ -29,7 +29,7 @@ def createUniqueString(str):
     while len(tempStr) < 3:
         tempStr = getRandomString()
         tempStr = "".join(set(tempStr))
-    
+
     return tempStr
 
 
@@ -50,7 +50,7 @@ def checkIfPatternExists(firstStr, secondStr):
                         print ("first", firstStr[i], secondChar[i - 2], secondStr[i-1], secondStr[i])
                         # print("true")
                         return True
-            
+
             elif firstStr[i + 1] == firstStr[i + 2]:
                 if firstStr[i] != firstStr[i + 1] and firstStr[i + 2] != secondStr[i]:
                     print ( "second", firstStr[i], firstStr[i + 1], firstStr[i + 2], secondStr[i])
@@ -83,7 +83,7 @@ def writeToFile(testFile):
         patternCode = 0
         valid = False
         pairInBrackets = False
-        pair = newString = randomString = randomString2 = "" 
+        pair = newString = randomString = randomString2 = ""
 
         for i in range(randint(3, 6)):
 
@@ -137,7 +137,7 @@ def writeToFile(testFile):
 
                 else:
                     pair = ""
-                
+
                 senFile.write(randomString2 + "] ")
 
                 newString = newString + "[" + randomString + pair + randomString2 + "]"
@@ -153,14 +153,14 @@ def writeToFile(testFile):
 
 
         testFile.write(newString + "\n")
-        
+
         # print("Length ",len(myList))
 
         if  len(myList) != 0:
             temp = myList.pop()
         else:
             temp = False
-        
+
         if len(validList) != 0:
             valid = validList.pop()
 
