@@ -92,7 +92,7 @@ void patternCheck::printValidity()
 {
     if (valid)
     {
-        cout << "True" << " - pattern " << pattern << " ";
+        cout << "True" << " - pattern " << pattern << " " << patternSubstring << endl;
     }
     else
     {
@@ -265,24 +265,26 @@ bool patternCheck::checkCenter(string::iterator first, string::iterator fourth,
                                  int maxItr, string & substr)
 {
 
-
-
-
     for ( int i = 0; i < maxItr; i++, first++, fourth++)
     {
         // cout << "\t" << *first << *(first + 1) << *(fourth - 1)<< *(fourth) << endl << endl;
-        if (*first == *(first + 1) && *fourth == *(fourth - 1) )
-            return false;
+        // if (*first == *(first + 1) && *fourth == *(fourth - 1) )
+        //     return false;
 
         if (  (*first == *fourth) && ( *( first + 1 ) == *( fourth - 1 ) ) )
         {
             // cout << *first << *(first + 1) << *(first + 2) << *(first + 3) << endl;
 
-            startPosition = first - substr.begin();
-            endPosition = startPosition + 3;
-            // cout << "center check" << endl;
-            setPattern(first, true);
-            return true;
+            if ( *first != *( first + 1 ) && *( fourth - 1 ) != *fourth )
+            {
+                startPosition = first - substr.begin();
+                endPosition = startPosition + 3;
+                // cout << "center check" << endl;
+                setPattern(first, true);
+                return true;
+
+            }
+
         }
 
     }
@@ -321,28 +323,32 @@ bool patternCheck::iteratorLoop(string::iterator front, string::iterator leftCen
 
 bool patternCheck::iteratorCheck(string::iterator front, string::iterator back, string & substr)
 {
-    if ( ( ( *front == *( front + 1 ) ) && ( *(front + 2) == *(front + 3 ) ) ) ||
-         ( ( *(back - 3) == *( back - 2 ) ) && ( *(back - 1) == *back )  )  )
-        return false;
 
     if ( ( *front == *( front + 3 ) ) && ( * ( front + 1 ) == *( front + 2 ) ) ) 
     {
-        setPattern( front, true );
-        startPosition = front - substr.begin();
-        endPosition = startPosition + 3;
-        // startAddress = front;
-        // endAddress = front + 3;
-        // cout << "front loop" << endl;
-        return true;
+        if ( *front != *( front + 1 ) && *( front + 2 ) != *( front + 3 ) )
+        {
+            setPattern( front, true );
+            startPosition = front - substr.begin();
+            endPosition = startPosition + 3;
+            // startAddress = front;
+            // endAddress = front + 3;
+            // cout << "front loop" << endl;
+            return true;
+        }
+
     }
 
     else if ( ( *( back - 3 ) == *back ) && ( *( back - 2 ) == *( back - 1 ) ) )
     {
-        setPattern( back, false );
-        startPosition = back - substr.begin() - 3;
-        endPosition = startPosition + 3;
-        // cout << "back loop" << endl;
-        return true;
+        if ( *( back - 3 ) != *( back - 2 ) && *( back - 1 ) != *back ) 
+        {
+            setPattern( back, false );
+            startPosition = back - substr.begin() - 3;
+            endPosition = startPosition + 3;
+            // cout << "back loop" << endl;
+            return true;
+        }
     }
 
     return false;
