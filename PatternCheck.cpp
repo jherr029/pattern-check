@@ -71,12 +71,7 @@ string PatternCheck::printCorrectPatterns( bool brackets )
     string tempStr;
     string tempSubstr = patternSubstring_;
 
-    // cout << tempSubstr << endl;
-
-
-
     tempSubstr.insert( patternFirstIndex_, "(" );
-    // cout << tempSubstr << endl;
     tempSubstr.insert( patternLastIndex_ + 2, ")" );
 
     if ( !brackets )

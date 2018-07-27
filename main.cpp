@@ -30,30 +30,17 @@ ifstream fileOpen( char*  fileName )
     return readFile;
 }
 
-vector<PatternCheck> computePattern( )
+void computePattern(vector<PatternCheck *> & patternObjectVector, char* fileName )
 {
-
-}
-
-int main( int argc, char **argv )
-{
-    string fileLine, fileLine2;
-    int userInput = 0;
-
-    vector<PatternCheck *> objectVector;
-
-    ifstream  inputFile = fileOpen(argv[1]);
-
-    high_resolution_clock::time_point t1 = high_resolution_clock::now();
-
-    ofstream outputFile;
-    ofstream correctFile;
-    ofstream incorrectFile;
-    outputFile.open("output.txt");
-    incorrectFile.open("incorrect.txt");
-    correctFile.open("cCorrect.txt");
-
     int line = 1;
+    string fileLine;
+    ifstream  inputFile = fileOpen(fileName);
+    ofstream outputFile, correctFile, incorrectFile;
+
+    outputFile.open("output.txt");
+    correctFile.open("correctPatterns.txt");
+    incorrectFile.open("incorrectPatterns.txt");
+
     while( getline(inputFile, fileLine ) )
     {
 
@@ -77,24 +64,22 @@ int main( int argc, char **argv )
             incorrectFile << "\n";
         }
 
-        objectVector.push_back(tempObject);
+        patternObjectVector.push_back(tempObject);
         line++;
     }
 
-    cout << "Number Correct: " << objectVector[1]->getCorrectAmountPatterns() << endl;
+    cout << "Number Correct: " << patternObjectVector[1]->getCorrectAmountPatterns() << endl;
 
     outputFile.close();
     correctFile.close();
     incorrectFile.close();
 
-    // cout << "Number Correct: " << i << endl;
+}
 
-    high_resolution_clock::time_point t2 = high_resolution_clock::now();
-
-    auto duration = duration_cast<microseconds>( t2 - t1 ).count();
-    cout << duration << endl;
-
-    int vectorSize = objectVector.size();
+void userPrompt(vector<PatternCheck*> & patternObjectVector)
+{
+    int userInput = 0;
+    int vectorSize = patternObjectVector.size();
 
     cout << endl;
     cout << "Enter '-1' at any time to exit " << endl;
@@ -116,7 +101,7 @@ int main( int argc, char **argv )
 
         if ( userInput >= 1 && userInput <= vectorSize )
         {
-            objectVector[userInput - 1]->printValidity( );
+            patternObjectVector[userInput - 1]->printValidity( );
         }
         
         else if ( userInput -1 )
@@ -131,6 +116,26 @@ int main( int argc, char **argv )
             cout << " or -1 to quit" << endl;
         }
     }
+
+}
+
+
+int main( int argc, char **argv )
+{
+    char* fileName = argv[1];
+
+    vector<PatternCheck *> patternObjectVector;
+
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
+    computePattern(patternObjectVector, fileName);
+
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+    auto duration = duration_cast<microseconds>( t2 - t1 ).count();
+    cout << duration << endl;
+
+    userPrompt(patternObjectVector);
 
     return 0;
 }
