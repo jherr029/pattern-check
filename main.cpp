@@ -1,17 +1,18 @@
 #include <iostream>
 #include <fstream>
-#include <regex>
 #include <string>
 #include <vector>
 #include <chrono>
-#include <boost/tokenizer.hpp>
-#include "patternCheck.h"
+// #include <regex>
+// #include <boost/tokenizer.hpp>
+
+#include "PatternCheck.h"
 
 using namespace std;
-using namespace boost;
 using namespace chrono;
+// using namespace boost;
 
-ifstream fileOpen(char* fileName)
+ifstream fileOpen( char*  fileName )
 {
     ifstream readFile;
 
@@ -25,9 +26,103 @@ ifstream fileOpen(char* fileName)
         cout << "file opened" << endl;
 
     cout << endl;
+
     return readFile;
 }
 
+int main( int argc, char **argv )
+{
+    string fileLine, fileLine2;
+    int userInput = 0;
+
+    vector<PatternCheck *> objectVector;
+
+    ifstream  inputFile = fileOpen(argv[1]);
+
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
+    ofstream outputFile;
+    ofstream correctFile;
+    outputFile.open("output.txt");
+
+    correctFile.open("cCorrect.txt");
+
+    int line = 1;
+    while( getline(inputFile, fileLine ) )
+    {
+
+        PatternCheck * tempObject = new PatternCheck(fileLine);
+
+        tempObject->assignVectors();
+        tempObject->computeValidity();
+        // tempObject->printValidity();
+
+        if (tempObject->isValid())
+        {
+            outputFile << line << "\n";
+            correctFile << line << "\n";
+            outputFile << tempObject->printCorrectPatterns(false);
+            outputFile << endl;
+        }
+
+        objectVector.push_back(tempObject);
+        line++;
+
+    }
+
+    cout << "Number Correct: " << objectVector[1]->getCorrectAmountPatterns() << endl;
+
+    outputFile.close();
+
+    // cout << "Number Correct: " << i << endl;
+
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+    auto duration = duration_cast<microseconds>( t2 - t1 ).count();
+    cout << duration << endl;
+
+    int vectorSize = objectVector.size();
+
+    cout << endl;
+    cout << "Enter 'quit' at any time to exit " << endl;
+    cout << "Enter line number to get specific information about that line " << endl;
+    cout << "Total lines: " << vectorSize << endl;
+    
+    while ( userInput != -1 )
+    {
+        cin >> userInput;
+        while ( cin.fail( ) )
+        {
+            cout << "please enter a number: ";
+            cin.clear();
+            cin.ignore(256, '\n');
+            cin >> userInput;
+            
+        }
+
+
+        if ( userInput >= 1 && userInput <= vectorSize )
+        {
+            objectVector[userInput - 1]->printValidity( );
+        }
+        
+        else if ( userInput -1 )
+        {
+            cout << "Program end" << endl;
+        }
+
+        else
+        {
+            cout << "That line does not exist " << endl;
+            cout << "Enter a number from 1 to " << vectorSize;
+            cout << " or -1 to quit" << endl;
+        }
+    }
+
+    return 0;
+}
+
+/*
 void boostToken(string str)
 {
 
@@ -71,104 +166,4 @@ void boostToken(string str)
     // cout << endl;
 
 }
-
-int main(int argc, char **argv)
-{
-
-    string fileLine, fileLine2;
-
-    vector<patternCheck *> objectVector;
-
-    ifstream  inputFile = fileOpen(argv[1]);
-
-    high_resolution_clock::time_point t1 = high_resolution_clock::now();
-
-    ofstream outputFile;
-    ofstream correctFile;
-    outputFile.open("output.txt");
-    correctFile.open("cCorrect.txt");
-
-    int i = 0;
-    int line = 1;
-    while( getline(inputFile, fileLine ) )
-    {
-
-        patternCheck * tempObject = new patternCheck(fileLine);
-
-        tempObject->assignVectors();
-        tempObject->checkValidty();
-        // tempObject->printValidity();
-
-        if (tempObject->getValidty())
-        {
-            outputFile << line << "\n";
-            correctFile << line << "\n";
-            outputFile << tempObject->printCorrectPatterns(false);
-            outputFile << endl;
-            i++;
-        }
-
-        objectVector.push_back(tempObject);
-        line++;
-
-            // ownDelimiter(fileLine);
-    }
-    outputFile.close();
-
-
-    // for ( auto obj : objectVector )
-    // {
-    //     //TODO: change spelling
-    //     if (!(obj->getValidty()))
-    //         obj->printIncorrectPatterns();
-    // }
-
-    cout << "Number Correct: " << i << endl;
-
-    high_resolution_clock::time_point t2 = high_resolution_clock::now();
-
-    auto duration = duration_cast<microseconds>( t2 - t1 ).count();
-    cout << duration << endl;
-
-    // ifstream  inputFile2 = fileOpen(argv[1]);
-
-    // high_resolution_clock::time_point t3 = high_resolution_clock::now();
-
-    // while( getline(inputFile2, fileLine2) )
-    //     boostToken(fileLine2);
-
-    // high_resolution_clock::time_point t4 = high_resolution_clock::now();
-
-    // auto duration2= duration_cast<microseconds>( t4 - t3 ).count();
-    // cout << duration2 << endl;
-
-    // cout << fileLine << endl;
-    // getline(inputFile, fileLine, ']' );
-    // cout << fileLine << endl;
-
-
-    return 0;
-}
-
-    // string str = "ecoabbafl";
-
-    // regex rx("b");
-    
-    // smatch mt;
-
-    // while(regex_search(str, mt, rx))
-    // {
-    //     for (auto x : mt)
-    //     {
-    //         cout << x;
-    //     }
-
-    //     str = mt.suffix().str();
-    // }
-
-    // cout << endl;
-
-    // if (regex_match(str, rx))
-    // {
-    //     cout << "true";
-    // }
+*/

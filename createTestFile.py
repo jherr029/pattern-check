@@ -78,7 +78,7 @@ def writeToFile(testFile):
     validList = []
     # patternObj = pattern()
 
-    for i in range(1000000):
+    for i in range(10000):
 
         patternCode = 0
         valid = False
@@ -93,10 +93,10 @@ def writeToFile(testFile):
                 validList.append(True)
                 patternCode = 1
                 pair = getRandomPair()
-                senFile.write(pair + " @@@@ ")
 
             randomString = createUniqueString( getRandomString() )
             senFile.write(randomString + " ");
+            senFile.write(pair + " ")
 
             if ( len(newString) > 0 and len(randomString) ):
                 valid = checkIfPatternExists(newString[-3:], randomString[:3])
@@ -197,7 +197,7 @@ def writeToFile(testFile):
 
 def main():
 
-    testFile = open("testFile2.txt", "w")
+    testFile = open("testFile.txt", "w")
 
     writeToFile(testFile)
 
