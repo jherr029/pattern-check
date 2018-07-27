@@ -2,49 +2,67 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <chrono>
+// #include <chrono>
 // #include <regex>
 // #include <boost/tokenizer.hpp>
 
 #include "PatternCheck.h"
 
 using namespace std;
-using namespace chrono;
+// using namespace chrono;
 // using namespace boost;
 
-ifstream fileOpen( char*  fileName )
+ifstream fileOpen( char* fileName )
 {
     ifstream readFile;
 
-    readFile.open(fileName);
+    readFile.open( fileName );
 
-    if (!readFile)
+    if ( !readFile )
     {
+        string newFileName;
+
         cout << "File did not open" << endl;
+        cout << "Enter file name: ";
+
+        while ( !readFile )
+        {
+            getline( cin, newFileName );
+            readFile.open( newFileName.c_str( ) );
+        }
     }
     else
+    {
         cout << "file opened" << endl;
+    }
 
     cout << endl;
 
     return readFile;
 }
 
-void computePattern(vector<PatternCheck *> & patternObjectVector, char* fileName )
+void computePattern( vector<PatternCheck *> & patternObjectVector, char* fileName )
 {
     int line = 1;
     string fileLine;
-    ifstream  inputFile = fileOpen(fileName);
+    ifstream  inputFile = fileOpen( fileName );
     ofstream outputFile, correctFile, incorrectFile;
 
-    outputFile.open("output.txt");
-    correctFile.open("correctPatterns.txt");
-    incorrectFile.open("incorrectPatterns.txt");
+    outputFile.open( "output.txt" );
+    correctFile.open( "correctPatterns.txt" );
+    incorrectFile.open(" incorrectPatterns.txt ");
 
-    while( getline(inputFile, fileLine ) )
+    if ( !outputFile || !correctFile || !incorrectFile )
     {
+        cout << "A file did not open" << endl;
+        exit(0);
+    }
 
-        PatternCheck * tempObject = new PatternCheck(fileLine);
+    cout << "Computing..." << endl;
+
+    while( getline( inputFile, fileLine ) )
+    {
+        PatternCheck * tempObject = new PatternCheck( fileLine );
 
         tempObject->assignVectors();
         tempObject->computeValidity();
@@ -126,14 +144,14 @@ int main( int argc, char **argv )
 
     vector<PatternCheck *> patternObjectVector;
 
-    high_resolution_clock::time_point t1 = high_resolution_clock::now();
+    // high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
     computePattern(patternObjectVector, fileName);
 
-    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+    // high_resolution_clock::time_point t2 = high_resolution_clock::now();
 
-    auto duration = duration_cast<microseconds>( t2 - t1 ).count();
-    cout << duration << endl;
+    // auto duration = duration_cast<microseconds>( t2 - t1 ).count();
+    // cout << duration << endl;
 
     userPrompt(patternObjectVector);
 
