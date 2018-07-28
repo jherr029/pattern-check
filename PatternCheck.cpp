@@ -170,6 +170,7 @@ void PatternCheck::setPattern( string::iterator itr, bool forward )
 {
     pattern_.clear( );
 
+    // TODO: pattern
     for ( int i = 0; i < 4; i++ )
     {
         if ( forward )
@@ -204,24 +205,34 @@ bool PatternCheck::checker( string & tempStr )
 {
     bool frontResult, backResult;
     int strLength = tempStr.length( ); 
+    int stringMidpoint = strLength / 2;
+
     if ( strLength < 3 )
         return false;
 
     int alphaArray[26] = {0};
 
-    string::iterator front = tempStr.begin();
-    string::iterator back = front + 3;  // 5
+    string::iterator front = tempStr.begin( );
+    string::iterator back = tempStr.end( ) - 1;  // 5
 
     // cout << tempStr << endl;
 
     // cout << *(front) << *(back) << endl;
-    for ( ; back != tempStr.end(); front++, back++)
-    {
-        frontResult = recursive(front, back, 2, alphaArray); // 2
-        fill_n(alphaArray, 26, 0);
 
-        if (result)
+    // if (strLength < 15)
+    // {
+    
+        
+        
+    // } // patternNum * 5
+
+    for ( ; front < back ; front++, back--)
+    {
+        frontResult = recursive( front, front + 3, 2, alphaArray); // 2
+
+        if ( frontResult )
         {
+            // cout << "FRONT " << endl;
             // if (!checkNeighbors())
             // cout << *(front) << *(back) << endl;
             patternSubstring_ = tempStr;
@@ -231,6 +242,25 @@ bool PatternCheck::checker( string & tempStr )
             setPattern(front, true);
             return true;
         }
+
+        fill_n(alphaArray, 26, 0);
+        backResult = recursive( back - 3, back, 2, alphaArray); // 2
+
+        if (backResult)
+        {
+            // cout << "BACK" << endl;
+            patternSubstring_ = tempStr;
+            patternFirstIndex_ = (back - 3) - tempStr.begin();
+            patternLastIndex_ = patternFirstIndex_ + 3; // 5
+            valid_ = true;
+            setPattern(back - 3, true);
+            return true;
+
+        }
+
+        fill_n(alphaArray, 26, 0);
+
+
 
         // cout << "result: " << result << endl;
     }
@@ -304,6 +334,7 @@ bool PatternCheck::checker( string & tempStr )
 
 bool PatternCheck::recursive(string::iterator front, string::iterator back, int steps, int array[26])
 {
+    // cout << steps << " " << *front << " " << *back << " !! "<< endl;
     if ( *front == *back )
     {
         // cout << steps << " " << *front << " " << *back << " !! "<< endl;
