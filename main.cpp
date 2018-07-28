@@ -41,7 +41,30 @@ ifstream fileOpen( char* fileName )
     return readFile;
 }
 
-void computePattern( vector<PatternCheck *> & patternObjectVector, char* fileName )
+int checkIfValidNumber( char* userInput )
+{
+    int result = atoi( userInput );
+
+    while ( result == 0 )
+    {
+        cin >> result;
+        while ( cin.fail( ) )
+        {
+            cout << "Enter a valid pattern number: ";
+            cin.clear(); 
+            cin.ignore(256, '\n');
+            cin >> result;
+
+            if ( result == 0 )
+                cout << "0 is not a valid number" << endl;
+        }
+
+    }
+
+    return result;
+}
+
+void computePattern( vector<PatternCheck *> & patternObjectVector, char* fileName, int patterNumber )
 {
     int line = 1;
     string fileLine;
@@ -62,7 +85,7 @@ void computePattern( vector<PatternCheck *> & patternObjectVector, char* fileNam
 
     while( getline( inputFile, fileLine ) )
     {
-        PatternCheck * tempObject = new PatternCheck( fileLine );
+        PatternCheck * tempObject = new PatternCheck( fileLine, patterNumber );
 
         tempObject->assignVectors();
         tempObject->computeValidity();
@@ -101,8 +124,8 @@ void userPrompt(vector<PatternCheck*> & patternObjectVector)
 
     cout << endl;
     cout << "Enter '-1' at any time to exit " << endl;
-    cout << "Enter line number to get specific information about that line " << endl;
     cout << "Total lines: " << vectorSize << endl;
+    cout << "Enter line number to get specific information about that line: ";
     
     while ( userInput != -1 )
     {
@@ -116,25 +139,24 @@ void userPrompt(vector<PatternCheck*> & patternObjectVector)
             
         }
 
-
         if ( userInput >= 1 && userInput <= vectorSize )
         {
             patternObjectVector[userInput - 1]->printValidity( );
         }
         
-        else if ( userInput -1 )
+        else if ( userInput == -1 )
         {
             cout << "Program end" << endl;
         }
 
         else
         {
+            cout << endl;
             cout << "That line does not exist " << endl;
             cout << "Enter a number from 1 to " << vectorSize;
             cout << " or -1 to quit" << endl;
         }
     }
-
 }
 
 
@@ -142,11 +164,13 @@ int main( int argc, char **argv )
 {
     char* fileName = argv[1];
 
+    int patternNumber = checkIfValidNumber( argv[2] );
+
     vector<PatternCheck *> patternObjectVector;
 
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
-    computePattern(patternObjectVector, fileName);
+    computePattern( patternObjectVector, fileName, patternNumber );
 
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
 

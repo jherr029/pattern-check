@@ -10,7 +10,8 @@ using namespace std;
 class PatternCheck
 {
     public:
-        PatternCheck( const string & );
+
+        PatternCheck( const string &, int );
         // ~PatternCheck();
 
         void printValidity( );
@@ -36,6 +37,7 @@ class PatternCheck
         bool valid_;
         static int sCorrect_;
         static int sLineNumber_;
+        int patternNum_;
 
         vector<string> bracketSubStrings_;
         vector<string> noBracketSubstrings_;
@@ -50,6 +52,7 @@ class PatternCheck
         bool checker( string & );
 
         int computeAlphaIndexValue( char );
+        int computeRange( );
         bool recursive( string::iterator, string::iterator, int, int );
         void setCorrectValues(string &, string::iterator );
 };

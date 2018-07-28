@@ -1,9 +1,10 @@
 #include "PatternCheck.h"
 
+
 int PatternCheck::sCorrect_ = 0;
 int PatternCheck::sLineNumber_ = 0;
 
-PatternCheck::PatternCheck( const string & str )
+PatternCheck::PatternCheck( const string & str, int num )
 {
     valid_ = false;
 
@@ -11,6 +12,7 @@ PatternCheck::PatternCheck( const string & str )
     pattern_ = "NO PATTERN FOUND";
     patternSubstring_ = "NO PATTERN FOUND";
 
+    patternNum_ = num;
     patternFirstIndex_ = -999;
     patternLastIndex_ = -999;
     sLineNumber_++;
@@ -69,9 +71,12 @@ string PatternCheck::printCorrectPatterns( bool brackets )
 {
     string tempStr;
     string tempSubstr = patternSubstring_;
+    int stepAhead = computeRange( );
+    int tempPosition = patternLastIndex_;
 
-
+    // cout << tempSubstr << endl;
     tempSubstr.insert( patternFirstIndex_, "(" );
+    // cout << tempSubstr << endl;
     tempSubstr.insert( patternLastIndex_ + 2, ")" );
 
     if ( !brackets )
@@ -146,6 +151,23 @@ void PatternCheck::assignVectors( )
 }
 
 
+
+void PatternCheck::setPattern( string::iterator itr )
+{
+    pattern_.clear( );
+
+    // TODO: pattern
+    for ( int i = 0; i < patternNum_ * 2; i++ )
+    {
+        pattern_.push_back( *( itr + i ) );
+    }
+}
+
+void PatternCheck::assignPatternSubstring( const string & str )
+{
+    patternSubstring_ = str;
+}
+
 bool PatternCheck::computeValidity( )
 {
     if ( checkBrackets( bracketSubStrings_ ) )
@@ -165,23 +187,6 @@ bool PatternCheck::computeValidity( )
     return false;
 }
 
-void PatternCheck::setPattern( string::iterator itr )
-{
-    pattern_.clear( );
-
-    // TODO: pattern
-    for ( int i = 0; i < 4; i++ )
-    {
-        pattern_.push_back( *( itr + i ) );
-    }
-}
-
-void PatternCheck::assignPatternSubstring( const string & str )
-{
-    patternSubstring_ = str;
-}
-
-
 bool PatternCheck::checkBrackets( const vector<string> & vec)
 {
     bool patternFound;
@@ -197,13 +202,25 @@ bool PatternCheck::checkBrackets( const vector<string> & vec)
     return false;
 }
 
+int PatternCheck::computeRange(  )
+{
+    if ( patternNum_ == 1 )
+        return 1;
+
+    else
+        return ( ( patternNum_ * 2 ) - 1 );
+
+}
+
 bool PatternCheck::checker( string & tempString )
 {
     bool frontResult, backResult;
+
+    int stepAhead = computeRange( );
     int stringLength = tempString.length( ); 
     int stringMidpoint = stringLength / 2;
 
-    if ( stringLength < 3 )
+    if ( stringLength < ( patternNum_ * 2 ) - 1 )
         return false;
 
     int alphaBitVector;
@@ -211,10 +228,11 @@ bool PatternCheck::checker( string & tempString )
     string::iterator front = tempString.begin( );
     string::iterator back = tempString.end( ) - 1;  // 5
 
-    for ( ; front != tempString.end( ); front++, back--)
+    for ( ; front + 3 != tempString.end( ); front++, back--)
     {
         alphaBitVector = 0;
-        frontResult = recursive( front, front + 3, 2, alphaBitVector ); // 2
+        frontResult = recursive( front, front + stepAhead, 
+                                    patternNum_, alphaBitVector ); // 2
 
         if ( frontResult )
         {
@@ -226,16 +244,18 @@ bool PatternCheck::checker( string & tempString )
     return false;
 }
 
-bool PatternCheck::recursive( string::iterator front, string::iterator back, int steps, int bitVector )
+bool PatternCheck::recursive( string::iterator front, string::iterator back,
+                                 int steps, int bitVector )
 {
     bool unique;
 
     if ( *front == *back )
     {
+        // cout << *front << " = " << *back << endl;
         int alphaIndex = computeAlphaIndexValue( *front );
 
         unique = ( ( bitVector & ( 1 << alphaIndex ) ) != 1 );
-        // cout << unique << endl;
+
         if (alphaIndex != -1 && unique )
         {
             bitVector |= ( 1 << alphaIndex );
@@ -269,9 +289,11 @@ int PatternCheck::computeAlphaIndexValue( char ch )
 
 void PatternCheck::setCorrectValues(string & substring, string::iterator front )
 {
+    int stepAhead = computeRange( );
+
     patternSubstring_ = substring;
     patternFirstIndex_ = front - substring.begin();
-    patternLastIndex_ = patternFirstIndex_ + 3; // 5
+    patternLastIndex_ = patternFirstIndex_ + stepAhead; // 5
 
     setPattern(front);
 }
