@@ -55,9 +55,9 @@ void PatternCheck::printLine( )
     cout << fileLine_ << endl;
 }
 
-bool PatternCheck::isStrEven( int strLength )
+bool PatternCheck::isStrEven( int stringLength )
 {
-    return ( ( strLength % 2 ) == 0 );
+    return ( ( stringLength % 2 ) == 0 );
 }
 
 bool PatternCheck::isValid( )
@@ -165,17 +165,14 @@ bool PatternCheck::computeValidity( )
     return false;
 }
 
-void PatternCheck::setPattern( string::iterator itr, bool forward )
+void PatternCheck::setPattern( string::iterator itr )
 {
     pattern_.clear( );
 
     // TODO: pattern
     for ( int i = 0; i < 4; i++ )
     {
-        if ( forward )
-            pattern_.push_back( *( itr + i ) );
-        else
-            pattern_.push_back( *( itr - i ) );
+        pattern_.push_back( *( itr + i ) );
     }
 }
 
@@ -200,34 +197,33 @@ bool PatternCheck::checkBrackets( const vector<string> & vec)
     return false;
 }
 
-bool PatternCheck::checker( string & tempStr )
+bool PatternCheck::checker( string & tempString )
 {
     bool frontResult, backResult;
-    int strLength = tempStr.length( ); 
-    int stringMidpoint = strLength / 2;
+    int stringLength = tempString.length( ); 
+    int stringMidpoint = stringLength / 2;
 
-    if ( strLength < 3 )
+    if ( stringLength < 3 )
         return false;
 
     int alphaArray[26] = {0};
 
-    string::iterator front = tempStr.begin( );
-    string::iterator back = tempStr.end( ) - 1;  // 5
+    string::iterator front = tempString.begin( );
+    string::iterator back = tempString.end( ) - 1;  // 5
 
-    for ( ; front != tempStr.end( ); front++, back--)
+    for ( ; front != tempString.end( ); front++, back--)
     {
         int alphaArray[26] = {0};
         frontResult = recursive( front, front + 3, 2, alphaArray); // 2
 
         if ( frontResult )
         {
-            setCorrectValues( tempStr, front );
+            setCorrectValues( tempString, front );
             return true;
         }
     }
 
     return false;
-
 }
 
 bool PatternCheck::recursive(string::iterator front, string::iterator back, int steps, int array[26])
@@ -248,7 +244,6 @@ bool PatternCheck::recursive(string::iterator front, string::iterator back, int 
             return( recursive( front + 1, back - 1, steps, array ) );
         
         }
-
     }
 
     return false;
@@ -273,26 +268,6 @@ void PatternCheck::setCorrectValues(string & substring, string::iterator front )
     patternSubstring_ = substring;
     patternFirstIndex_ = front - substring.begin();
     patternLastIndex_ = patternFirstIndex_ + 3; // 5
-    valid_ = true;
 
-    setPattern(front, true);
+    setPattern(front);
 }
-// bool PatternCheck::checkNeighbors( string::iterator front, string::iterator back, string & substring )
-// {
-//     if ( front != substring.begin( ) )
-//     {
-//         if ( *front == *( front - 1 ) )
-//             return false;
-//     }
-
-//     else
-//         return false;
-
-//     if ( back != substring.end() - 1 ) 
-//     {
-//         if ( *back == *( back + 1) )
-//             return false;
-//     }
-
-//     return true;
-// }

@@ -43,7 +43,7 @@ class PatternCheck
         int patternFirstIndex_, patternLastIndex_;
         string pattern_, fileLine_,  patternSubstring_;
 
-        void setPattern( string::iterator, bool );
+        void setPattern( string::iterator );
         void assignPatternSubstring( const string & );
 
         bool checkBrackets( const vector<string> & );
@@ -52,8 +52,6 @@ class PatternCheck
         int computeAlphaIndexValue( char );
         bool recursive( string::iterator, string::iterator, int, int [] );
         void setCorrectValues(string &, string::iterator );
-        // bool checkNeighbors( string::iterator, string::iterator, string & );
-
 };
 
 #endif
