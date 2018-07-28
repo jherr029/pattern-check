@@ -50,7 +50,7 @@ class PatternCheck
         bool checker( string & );
 
         int computeAlphaIndexValue( char );
-        bool recursive( string::iterator, string::iterator, int, int [] );
+        bool recursive( string::iterator, string::iterator, int, int );
         void setCorrectValues(string &, string::iterator );
 };
 

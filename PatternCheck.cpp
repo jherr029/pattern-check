@@ -206,15 +206,15 @@ bool PatternCheck::checker( string & tempString )
     if ( stringLength < 3 )
         return false;
 
-    int alphaArray[26] = {0};
+    int alphaBitVector;
 
     string::iterator front = tempString.begin( );
     string::iterator back = tempString.end( ) - 1;  // 5
 
     for ( ; front != tempString.end( ); front++, back--)
     {
-        int alphaArray[26] = {0};
-        frontResult = recursive( front, front + 3, 2, alphaArray); // 2
+        alphaBitVector = 0;
+        frontResult = recursive( front, front + 3, 2, alphaBitVector ); // 2
 
         if ( frontResult )
         {
@@ -226,22 +226,26 @@ bool PatternCheck::checker( string & tempString )
     return false;
 }
 
-bool PatternCheck::recursive(string::iterator front, string::iterator back, int steps, int array[26])
+bool PatternCheck::recursive( string::iterator front, string::iterator back, int steps, int bitVector )
 {
+    bool unique;
+
     if ( *front == *back )
     {
-        int alphaIndex = computeAlphaIndexValue(*front);
+        int alphaIndex = computeAlphaIndexValue( *front );
 
-        if (alphaIndex != -1 && array[alphaIndex] != 1 )
+        unique = ( ( bitVector & ( 1 << alphaIndex ) ) != 1 );
+        // cout << unique << endl;
+        if (alphaIndex != -1 && unique )
         {
-            array[alphaIndex] = 1;
+            bitVector |= ( 1 << alphaIndex );
 
             if ( steps == 1 ) // 0 for 2, 1 for 3, pattern - 2
                 return true;
 
             steps--;
 
-            return( recursive( front + 1, back - 1, steps, array ) );
+            return( recursive( front + 1, back - 1, steps, bitVector ) );
         
         }
     }
