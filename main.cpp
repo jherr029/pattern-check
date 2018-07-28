@@ -179,5 +179,10 @@ int main( int argc, char **argv )
 
     userPrompt(patternObjectVector);
 
+    for ( auto obj : patternObjectVector )
+    {
+        delete obj;
+    }
+
     return 0;
 }

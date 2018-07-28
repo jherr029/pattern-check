@@ -7,12 +7,14 @@
 
 using namespace std;
 
+// PatterCheck object responsible for checking if a pattern exist
+// within a line of a file
 class PatternCheck
 {
     public:
 
         PatternCheck( const string &, int );
-        // ~PatternCheck();
+        PatternCheck();
 
         void printValidity( );
         void printLine( );
