@@ -207,19 +207,22 @@ bool PatternCheck::checker( string & tempStr )
     if ( strLength < 3 )
         return false;
 
-    int stringMidpoint = strLength / 2;
     int alphaArray[26] = {0};
 
     string::iterator front = tempStr.begin();
     string::iterator back = front + 3;  // 5
 
+    // cout << tempStr << endl;
+
     // cout << *(front) << *(back) << endl;
     for ( ; back != tempStr.end(); front++, back++)
     {
         result = recursive(front, back, 2, alphaArray); // 2
+        fill_n(alphaArray, 26, 0);
 
         if (result)
         {
+            // if (!checkNeighbors())
             // cout << *(front) << *(back) << endl;
             patternSubstring_ = tempStr;
             patternFirstIndex_ = front - tempStr.begin();
@@ -301,9 +304,9 @@ bool PatternCheck::checker( string & tempStr )
 
 bool PatternCheck::recursive(string::iterator front, string::iterator back, int steps, int array[26])
 {
-    // cout << steps << " " << *front << " " << *back << " !! "<< endl;
     if ( *front == *back )
     {
+        // cout << steps << " " << *front << " " << *back << " !! "<< endl;
         int alphaIndex = computeAlphaIndexValue(*front);
         // cout << "alphaIndex " << alphaIndex << " steps " << steps << endl;
 
@@ -350,7 +353,7 @@ bool PatternCheck::checkNeighbors( string::iterator front, string::iterator back
     else
         return false;
 
-    if ( back != substring.end() ) 
+    if ( back != substring.end() - 1 ) 
     {
         if ( *back == *( back + 1) )
             return false;
