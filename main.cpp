@@ -73,7 +73,7 @@ void computePattern( vector<PatternCheck *> & patternObjectVector, char* fileNam
 
     outputFile.open( "output.txt" );
     correctFile.open( "correctPatterns.txt" );
-    incorrectFile.open(" incorrectPatterns.txt ");
+    incorrectFile.open("incorrectPatterns.txt ");
 
     if ( !outputFile || !correctFile || !incorrectFile )
     {
