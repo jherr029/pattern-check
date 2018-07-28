@@ -133,7 +133,7 @@ void PatternCheck::assignVectors( )
         {
 
             if ( substrInBrackets )
-                bracketSubStrings_.push_back( token );
+                bracketSubstrings_.push_back( token );
             
             else
                 noBracketSubstrings_.push_back( token );
@@ -163,20 +163,20 @@ void PatternCheck::setPattern( string::iterator itr )
     }
 }
 
-void PatternCheck::assignPatternSubstring( const string & str )
+void PatternCheck::setPatternSubstring( const string & str )
 {
     patternSubstring_ = str;
 }
 
 bool PatternCheck::computeValidity( )
 {
-    if ( checkBrackets( bracketSubStrings_ ) )
+    if ( checkVector( bracketSubstrings_ ) )
     {
         valid_ = false;
         return false;
     }
     
-    else if ( checkBrackets( noBracketSubstrings_ ) )
+    else if ( checkVector( noBracketSubstrings_ ) )
     {
         valid_ = true;
         sCorrect_++;
@@ -187,7 +187,7 @@ bool PatternCheck::computeValidity( )
     return false;
 }
 
-bool PatternCheck::checkBrackets( const vector<string> & vec)
+bool PatternCheck::checkVector( const vector<string> & vec)
 {
     bool patternFound;
 
