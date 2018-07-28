@@ -107,7 +107,7 @@ int PatternCheck::getCorrectAmountPatterns( )
 void PatternCheck::assignVectors( )
 {
 
-    string str = this->fileLine_;
+    string str = fileLine_;
 
     size_t position = 0;
     string token;
@@ -193,7 +193,7 @@ bool PatternCheck::checkBrackets( const vector<string> & vec)
 
     for ( auto str : vec )
     {
-        patternFound = checker( str );
+        patternFound = scanSubstring( str );
 
         if (patternFound)
             return true;
@@ -212,7 +212,7 @@ int PatternCheck::computeRange(  )
 
 }
 
-bool PatternCheck::checker( string & tempString )
+bool PatternCheck::scanSubstring( string & tempString )
 {
     bool frontResult, backResult;
 
@@ -231,7 +231,7 @@ bool PatternCheck::checker( string & tempString )
     for ( ; front + 3 != tempString.end( ); front++, back--)
     {
         alphaBitVector = 0;
-        frontResult = recursive( front, front + stepAhead, 
+        frontResult = matchRecursively( front, front + stepAhead, 
                                     patternNum_, alphaBitVector ); // 2
 
         if ( frontResult )
@@ -244,7 +244,7 @@ bool PatternCheck::checker( string & tempString )
     return false;
 }
 
-bool PatternCheck::recursive( string::iterator front, string::iterator back,
+bool PatternCheck::matchRecursively( string::iterator front, string::iterator back,
                                  int steps, int bitVector )
 {
     bool unique;
@@ -265,7 +265,7 @@ bool PatternCheck::recursive( string::iterator front, string::iterator back,
 
             steps--;
 
-            return( recursive( front + 1, back - 1, steps, bitVector ) );
+            return( matchRecursively( front + 1, back - 1, steps, bitVector ) );
         
         }
     }

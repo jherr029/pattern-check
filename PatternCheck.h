@@ -49,11 +49,11 @@ class PatternCheck
         void assignPatternSubstring( const string & );
 
         bool checkBrackets( const vector<string> & );
-        bool checker( string & );
+        bool scanSubstring( string & );
 
         int computeAlphaIndexValue( char );
         int computeRange( );
-        bool recursive( string::iterator, string::iterator, int, int );
+        bool matchRecursively( string::iterator, string::iterator, int, int );
         void setCorrectValues(string &, string::iterator );
 };
 
