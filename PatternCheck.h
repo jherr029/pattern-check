@@ -49,19 +49,10 @@ class PatternCheck
         bool checkBrackets( const vector<string> & );
         bool checker( string & );
 
-        bool checkCenter( string::iterator, string::iterator, int, string & );
-
-        bool iteratorLoop( string::iterator &, string::iterator &, string::iterator &,
-                             string::iterator &, bool, string & );
-
-        bool iteratorCheck( string::iterator &, string::iterator &, string & );
-
-        bool ifMatch( char, char );
-        bool ifLegalMatch( char, char );
-
         int computeAlphaIndexValue( char );
         bool recursive( string::iterator, string::iterator, int, int [] );
-        bool checkNeighbors( string::iterator, string::iterator, string & );
+        void setCorrectValues(string &, string::iterator );
+        // bool checkNeighbors( string::iterator, string::iterator, string & );
 
 };
 

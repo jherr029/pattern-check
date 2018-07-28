@@ -16,7 +16,6 @@ PatternCheck::PatternCheck( const string & str )
     sLineNumber_++;
 }
 
-
 void PatternCheck::printValidity( )
 {
 
@@ -215,131 +214,41 @@ bool PatternCheck::checker( string & tempStr )
     string::iterator front = tempStr.begin( );
     string::iterator back = tempStr.end( ) - 1;  // 5
 
-    // cout << tempStr << endl;
-
-    // cout << *(front) << *(back) << endl;
-
-    // if (strLength < 15)
-    // {
-    
-        
-        
-    // } // patternNum * 5
-
-    for ( ; front < back ; front++, back--)
+    for ( ; front != tempStr.end( ); front++, back--)
     {
+        int alphaArray[26] = {0};
         frontResult = recursive( front, front + 3, 2, alphaArray); // 2
 
         if ( frontResult )
         {
-            // cout << "FRONT " << endl;
-            // if (!checkNeighbors())
-            // cout << *(front) << *(back) << endl;
-            patternSubstring_ = tempStr;
-            patternFirstIndex_ = front - tempStr.begin();
-            patternLastIndex_ = patternFirstIndex_ + 3; // 5
-            valid_ = true;
-            setPattern(front, true);
+            setCorrectValues( tempStr, front );
             return true;
         }
 
-        fill_n(alphaArray, 26, 0);
-        backResult = recursive( back - 3, back, 2, alphaArray); // 2
+        // fill_n(alphaArray, 26, 0);
+        // backResult = recursive( back - 3, back, 2, alphaArray); // 2
 
-        if (backResult)
-        {
-            // cout << "BACK" << endl;
-            patternSubstring_ = tempStr;
-            patternFirstIndex_ = (back - 3) - tempStr.begin();
-            patternLastIndex_ = patternFirstIndex_ + 3; // 5
-            valid_ = true;
-            setPattern(back - 3, true);
-            return true;
+        // if (backResult)
+        // {
+        //     // cout << "BACK" << endl;
+        //     setCorrectValues( tempStr, back - 3 );
+        //     return true;
 
-        }
+        // }
 
-        fill_n(alphaArray, 26, 0);
+        // fill_n(alphaArray, 26, 0);
 
-
-
-        // cout << "result: " << result << endl;
     }
 
-
-
     return false;
-
-    // bool evenLength = isStrEven( strLength );
-
-    // string::iterator itr = tempStr.begin( );
-    // string::iterator backItr = tempStr.end( ) - 1;
-
-    // string::iterator leftCenter;
-    // string::iterator rightCenter;
-
-    // bool smallStr = false;
-    // bool patternFound;
-    
-
-    // if ( strLength < 10 )
-    // {
-    //     leftCenter = backItr;
-    //     rightCenter = backItr;
-
-    //     smallStr = true;
-    // }
-
-    // else
-    // {
-    //     if( evenLength )
-    //     {
-    //         rightCenter = itr + stringMidpoint;
-    //         leftCenter = rightCenter - 1;
-
-    //         patternFound = checkCenter( (rightCenter - 3), rightCenter, 4, tempStr );
-
-    //         if ( patternFound )
-    //         {
-    //             assignPatternSubstring( tempStr );
-    //             return true;
-    //         }
-    //     }
-
-    //     else
-    //     {
-    //         leftCenter  = itr + stringMidpoint;
-    //         rightCenter = leftCenter;
-
-    //         patternFound = checkCenter( leftCenter - 2, leftCenter + 1, 2, tempStr );
-
-    //         if ( patternFound )
-    //         {
-    //             assignPatternSubstring( tempStr );
-    //             return true;
-    //         }
-    //     }
-    // }
-
-    // patternFound = iteratorLoop( itr, leftCenter, rightCenter, backItr, smallStr, tempStr ); 
-
-    // if ( patternFound )
-    // {
-    //     assignPatternSubstring( tempStr );
-    //     return true;
-    // }
-
-    // return false;
 
 }
 
 bool PatternCheck::recursive(string::iterator front, string::iterator back, int steps, int array[26])
 {
-    // cout << steps << " " << *front << " " << *back << " !! "<< endl;
     if ( *front == *back )
     {
-        // cout << steps << " " << *front << " " << *back << " !! "<< endl;
         int alphaIndex = computeAlphaIndexValue(*front);
-        // cout << "alphaIndex " << alphaIndex << " steps " << steps << endl;
 
         if (alphaIndex != -1 && array[alphaIndex] != 1 )
         {
@@ -373,145 +282,31 @@ int PatternCheck::computeAlphaIndexValue( char ch )
     return -1;
 }
 
-bool PatternCheck::checkNeighbors( string::iterator front, string::iterator back, string & substring )
+void PatternCheck::setCorrectValues(string & substring, string::iterator front )
 {
-    if ( front != substring.begin( ) )
-    {
-        if ( *front == *( front - 1 ) )
-            return false;
-    }
+    patternSubstring_ = substring;
+    patternFirstIndex_ = front - substring.begin();
+    patternLastIndex_ = patternFirstIndex_ + 3; // 5
+    valid_ = true;
 
-    else
-        return false;
-
-    if ( back != substring.end() - 1 ) 
-    {
-        if ( *back == *( back + 1) )
-            return false;
-    }
-
-    return true;
+    setPattern(front, true);
 }
-
-// bool PatternCheck::checkCenter( string::iterator first, string::iterator fourth,
-//                                  int maxItr, string & substr )
+// bool PatternCheck::checkNeighbors( string::iterator front, string::iterator back, string & substring )
 // {
-//     bool firstMatchesLast, middleMatches, firstTwoLegal, lastTwoLegal;
-
-//     for ( int i = 0; i < maxItr; i++, first++, fourth++ )
+//     if ( front != substring.begin( ) )
 //     {
-
-//         firstMatchesLast = ifMatch(*first, *fourth);
-//         middleMatches = ifMatch( *( first + 1 ), *( fourth - 1 ) );
-
-//         if (  firstMatchesLast && middleMatches )
-//         {
-//             firstTwoLegal = ifLegalMatch(*first, *(first + 1));
-//             lastTwoLegal = ifLegalMatch( *( fourth - 1 ), *fourth );
-
-//             if ( firstTwoLegal && lastTwoLegal )
-//             {
-//                 patternFirstIndex_ = first - substr.begin( );
-//                 patternLastIndex_ = patternFirstIndex_ + 3;
-
-//                 setPattern( first, true );
-
-//                 return true;
-//             }
-//         }
+//         if ( *front == *( front - 1 ) )
+//             return false;
 //     }
 
-//     return false;
-// }
+//     else
+//         return false;
 
-// bool PatternCheck::iteratorLoop( string::iterator & front, string::iterator & leftCenter, 
-//                                 string::iterator & rightCenter, string::iterator & back, 
-//                                 bool smallStr, string & substr )
-// {
-//     bool patternFoundLeft, patternFoundRight;
-
-//     for ( ; front <= leftCenter - 3 && front + 3 <= leftCenter; front++, back--,
-//             leftCenter--, rightCenter++ )
+//     if ( back != substring.end() - 1 ) 
 //     {
-//         if ( smallStr )
-//             patternFoundLeft = iteratorCheck( front, back, substr );
-
-//         else 
-//         {
-//             patternFoundLeft = iteratorCheck( front, leftCenter, substr );
-//             patternFoundRight = iteratorCheck( rightCenter, back, substr );
-//         }
-
-//         if ( patternFoundLeft || patternFoundRight )
-//             return true;
+//         if ( *back == *( back + 1) )
+//             return false;
 //     }
 
-//     return false;
+//     return true;
 // }
-
-// bool PatternCheck::iteratorCheck( string::iterator & front, string::iterator & back, string & substr )
-// {
-//     bool firstMatchesLast, middleMatches, firstTwoLegal, lastTwoLegal;
-
-//     firstMatchesLast = ifMatch( *front, *( front +  3 ) );
-//     middleMatches = ifMatch( *(front + 1), *( front + 2 ) );
-
-//     if ( firstMatchesLast && middleMatches ) 
-//     {
-//         firstTwoLegal = ifLegalMatch( *front, *( front + 1 ) );
-//         lastTwoLegal = ifLegalMatch( *( front + 2 ), *( front + 3 ) );
-
-//         if ( firstTwoLegal && lastTwoLegal )
-//         {
-//             setPattern( front, true );
-
-//             patternFirstIndex_ = front - substr.begin( );
-//             patternLastIndex_ = patternFirstIndex_ + 3;
-
-//             return true;
-//         }
-//     }
-
-
-//     else 
-//     {
-//         firstMatchesLast = ifMatch( *( back - 3 ), *back );
-//         middleMatches = ifMatch( *( back - 2 ), *( back - 1 ) );
-
-//         if ( firstMatchesLast && middleMatches )
-//         {
-//             firstTwoLegal = ifLegalMatch( *( back - 3 ), *( back - 2 ) );
-//             lastTwoLegal = ifLegalMatch( *( back - 1 ), *back );
-
-//             if ( firstTwoLegal && lastTwoLegal ) 
-//             {
-//                 setPattern( back, false );
-
-//                 patternFirstIndex_ = back - substr.begin( ) - 3;
-//                 patternLastIndex_ = patternFirstIndex_ + 3;
-
-//                 return true;
-//             }
-//         }
-//     }
-
-//     return false;
-// }
-
-// bool PatternCheck::ifMatch( char a, char b)
-// {
-//     if ( a == b )
-//         return true;
-    
-//     return false;
-// }
-
-// bool PatternCheck::ifLegalMatch( char a, char b)
-// {
-//     if ( a != b )
-//         return true;
-    
-//     return false;
-// }
-
-// scalable through vector??
