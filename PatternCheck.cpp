@@ -202,7 +202,7 @@ bool PatternCheck::checkBrackets( const vector<string> & vec)
 
 bool PatternCheck::checker( string & tempStr )
 {
-    bool result;
+    bool frontResult, backResult;
     int strLength = tempStr.length( ); 
     if ( strLength < 3 )
         return false;
@@ -217,7 +217,7 @@ bool PatternCheck::checker( string & tempStr )
     // cout << *(front) << *(back) << endl;
     for ( ; back != tempStr.end(); front++, back++)
     {
-        result = recursive(front, back, 2, alphaArray); // 2
+        frontResult = recursive(front, back, 2, alphaArray); // 2
         fill_n(alphaArray, 26, 0);
 
         if (result)
