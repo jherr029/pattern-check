@@ -2,14 +2,14 @@
 #include <fstream>
 #include <string>
 #include <vector>
-// #include <chrono>
+#include <chrono>
 // #include <regex>
 // #include <boost/tokenizer.hpp>
 
 #include "PatternCheck.h"
 
 using namespace std;
-// using namespace chrono;
+using namespace chrono;
 // using namespace boost;
 
 ifstream fileOpen( char* fileName )
@@ -144,14 +144,14 @@ int main( int argc, char **argv )
 
     vector<PatternCheck *> patternObjectVector;
 
-    // high_resolution_clock::time_point t1 = high_resolution_clock::now();
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
     computePattern(patternObjectVector, fileName);
 
-    // high_resolution_clock::time_point t2 = high_resolution_clock::now();
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
 
-    // auto duration = duration_cast<microseconds>( t2 - t1 ).count();
-    // cout << duration << endl;
+    auto duration = duration_cast<microseconds>( t2 - t1 ).count();
+    cout << duration << endl;
 
     userPrompt(patternObjectVector);
 
