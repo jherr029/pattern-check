@@ -28,6 +28,7 @@ class PatternCheck
         bool computeValidity( );
 
 
+
         // make a nice print for a specific line
         // set line number
 
@@ -57,6 +58,10 @@ class PatternCheck
 
         bool ifMatch( char, char );
         bool ifLegalMatch( char, char );
+
+        int computeAlphaIndexValue( char );
+        bool recursive( string::iterator, string::iterator, int, int [] );
+        bool checkNeighbors( string::iterator, string::iterator, string & );
 
 };
 
