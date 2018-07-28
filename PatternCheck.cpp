@@ -224,20 +224,6 @@ bool PatternCheck::checker( string & tempStr )
             setCorrectValues( tempStr, front );
             return true;
         }
-
-        // fill_n(alphaArray, 26, 0);
-        // backResult = recursive( back - 3, back, 2, alphaArray); // 2
-
-        // if (backResult)
-        // {
-        //     // cout << "BACK" << endl;
-        //     setCorrectValues( tempStr, back - 3 );
-        //     return true;
-
-        // }
-
-        // fill_n(alphaArray, 26, 0);
-
     }
 
     return false;
