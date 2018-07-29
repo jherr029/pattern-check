@@ -47,7 +47,7 @@ class PatternCheck
 
         // Returns a string that contains information
         // pertaining to the object's line that has 
-        // a pair
+        // a pattern
         string printCorrectPatterns( bool );
 
         // Returns the number of correct patterns;
@@ -76,7 +76,7 @@ class PatternCheck
         int patternFirstIndex_, patternLastIndex_;
 
         // The pattern, file line, and the substring the pattern is found in
-        string pattern_, fileLine_,  patternSubstring_;
+        string pattern_, patternSubstring_, fileLine_;
                                                         
         // Sets pattern_
         void setPattern( string::iterator ); 
@@ -92,11 +92,9 @@ class PatternCheck
         bool scanSubstring( string & );
 
         // Recursively checks if the two string iterators match
-        // the first int is the number of recurseive steps required to be
-        // done in order to reach the recursion's base case
-        // The last int is a bit vector that checks which alphabetical characters
+        // The int is a bit vector that checks which alphabetical characters
         // have matched so far. This is explained more in the function
-        bool matchRecursively( string::iterator, string::iterator, int, int );
+        bool matchRecursively( string::iterator, string::iterator, int );
 
         // If a pattern is found inside [] then 
         // pattern_, patternSubstring_, patternFirstIndex_ and patternLastIndex_
