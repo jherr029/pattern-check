@@ -2,16 +2,18 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <chrono>
-// #include <regex>
-// #include <boost/tokenizer.hpp>
+// #include <chrono> // used for time
+// #include <boost/tokenizer.hpp> // decided not to use
 
 #include "PatternCheck.h"
 
 using namespace std;
-using namespace chrono;
-// using namespace boost;
+// using namespace chrono;
 
+// Opens file named in fileName
+// If it does not exist, it prompts
+// the user to enter the file name again
+// This occur until user inputs an actual file name
 ifstream fileOpen( char* fileName )
 {
     ifstream readFile;
@@ -41,6 +43,10 @@ ifstream fileOpen( char* fileName )
     return readFile;
 }
 
+// Checks if the user entered a valid number
+// If the user did not enter a valid number
+// they are prompted to enter a valid number until
+// it is correct
 int checkIfValidNumber( char* userInput )
 {
     int result = atoi( userInput );
@@ -64,17 +70,31 @@ int checkIfValidNumber( char* userInput )
     return result;
 }
 
+//  PatternCheck object is created here
+// This method is responsible for creating and initiating the call
+// to compute the objects validity
+// the vector patternObjectVector is passed by reference to let
+// main to use it's contents
 void computePattern( vector<PatternCheck *> & patternObjectVector, char* fileName, int patterNumber )
 {
     int line = 1;
     string fileLine;
     ifstream  inputFile = fileOpen( fileName );
+
+    // creates the output file streams
     ofstream outputFile, correctFile, incorrectFile;
 
-    outputFile.open( "output.txt" );
-    correctFile.open( "correctPatterns.txt" );
+    // Results list of correct lines and its patterns
+    outputFile.open( "output.txt" ); 
+
+    // Does the same as above but for incorrect lines
     incorrectFile.open("incorrectPatterns.txt ");
 
+    // A file for comparing a test case file created from pyython file
+    // testing was used with shell's diff command
+    correctFile.open( "correctPatterns.txt" );
+
+    // If one file did not open exit
     if ( !outputFile || !correctFile || !incorrectFile )
     {
         cout << "A file did not open" << endl;
@@ -83,17 +103,27 @@ void computePattern( vector<PatternCheck *> & patternObjectVector, char* fileNam
 
     cout << "Computing..." << endl;
 
+    // While there are lines in inputFile continue with the loop
+    // the lines of inputFile are placed in fileLine
     while( getline( inputFile, fileLine ) )
     {
+        // Dynamically create PatternCheck objects
+        // The file name and patternNumber are passed in to the default constructor
         PatternCheck * tempObject = new PatternCheck( fileLine, patterNumber );
 
+        // Assigns the substrings of the string to the propre vectors
+        // bracketSubstring_ or noBracketSubstring
         tempObject->assignVectors();
+
+        // Thee call to determine fileLine contains a pattern
         tempObject->computeValidity();
 
+        // Based on valid status, print to the proper files
         if (tempObject->isValid())
         {
-            outputFile << line << "\n";
             correctFile << line << "\n";
+
+            outputFile << line << "\n";
             outputFile << tempObject->printCorrectPatterns(false);
             outputFile << endl;
         }
@@ -105,10 +135,14 @@ void computePattern( vector<PatternCheck *> & patternObjectVector, char* fileNam
             incorrectFile << "\n";
         }
 
+        // Push the PatternCheck object into the vector
         patternObjectVector.push_back(tempObject);
         line++;
     }
 
+    // Prints the total number of correct lines
+    // The index value does not matter as long as it exist in the vector
+    // reason for this is that the class function returns a static variable
     cout << "Number Correct: " << patternObjectVector[1]->getCorrectAmountPatterns() << endl;
 
     outputFile.close();
@@ -117,6 +151,10 @@ void computePattern( vector<PatternCheck *> & patternObjectVector, char* fileNam
 
 }
 
+// A prompt that ask the user if they would like
+// information to a specific line
+// If the input is invalid, then it prompts the
+// user to enter a valid number
 void userPrompt(vector<PatternCheck*> & patternObjectVector)
 {
     int userInput = 0;
@@ -141,6 +179,8 @@ void userPrompt(vector<PatternCheck*> & patternObjectVector)
 
         if ( userInput >= 1 && userInput <= vectorSize )
         {
+            // Prints information pertaining to the specific
+            // PatternCheck object
             patternObjectVector[userInput - 1]->printValidity( );
         }
         
@@ -162,23 +202,27 @@ void userPrompt(vector<PatternCheck*> & patternObjectVector)
 
 int main( int argc, char **argv )
 {
+    // Second command line arugment
     char* fileName = argv[1];
 
+    // Third command line argument
     int patternNumber = checkIfValidNumber( argv[2] );
 
     vector<PatternCheck *> patternObjectVector;
 
-    high_resolution_clock::time_point t1 = high_resolution_clock::now();
+    // high_resolution_clock::time_point t1 = high_resolution_clock::now();
 
+    // Creates and works with PatternCheck objects
     computePattern( patternObjectVector, fileName, patternNumber );
 
-    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+    // high_resolution_clock::time_point t2 = high_resolution_clock::now();
 
-    auto duration = duration_cast<microseconds>( t2 - t1 ).count();
-    cout << duration << endl;
+    // auto duration = duration_cast<microseconds>( t2 - t1 ).count();
+    // cout << duration << endl;
 
     userPrompt(patternObjectVector);
 
+    // Deletes the dynnamically created objects to avoid memory leaks
     for ( auto obj : patternObjectVector )
     {
         delete obj;
